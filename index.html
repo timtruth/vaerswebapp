@@ -1,0 +1,723 @@
+<html>
+	<head>
+		<title>VAERS: Adverse Events After Covid Vaccine</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js" type="text/javascript"></script>
+		<script src="js/FileSaver.min.js" type="text/javascript"></script>
+		<script src="js/html2canvas.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.7/rr-1.2.7/sc-2.0.3/datatables.min.css"/> 
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-html5-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.7/rr-1.2.7/sc-2.0.3/datatables.min.js"></script>
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+		<script type="text/javascript">
+			var allData;
+			var dataFiles = ["allVaersRecordsPart1.txt", "allVaersRecordsPart2.txt", "allVaersRecordsPart3.txt"];
+			var dataFileLoadNum = 0;
+			var allDataTxt = '';
+			var table;
+			var tblHeightOffset = 180;
+			var dataInds = {
+				text: 0,
+				age: 1,
+				sex: 2,
+				vaxDate: 3,
+				date: 4,
+				died: 5,
+				hosp: 6,
+				erEd: 7,
+				lifeThreat: 8,
+				disabled: 9,
+				vaxManu: 10
+			};
+			$(document).ready(function() {
+				//loadAllVaersData(browseAllData);
+				//loadVaersData(browseAllData);
+				 $(document).on("change", ".showColumnCheck", function() { 
+					var isChk = $(this).prop("checked");
+					var col = $(this).attr("col");
+					var column;
+					if(col == "id") {
+						column = table.column(0);
+					} else if(col == "text") {
+						column = table.column(1);
+					} else if(col == "vaxDate") {
+						column = table.column(2);
+					} else if(col == "date") {
+						column = table.column(3);
+					} else if(col == "age") {
+						column = table.column(4);
+					} else if(col == "sex") {
+						column = table.column(5);
+					} else if(col == "death") {
+						column = table.column(6);
+					} else if(col == "lifeThreatening") {
+						column = table.column(7);
+					} else if(col == "erEdVisit") {
+						column = table.column(8);
+					}
+					if(column != null) {
+						column.visible( !column.visible() );
+					}
+				 });
+				 $(document).on("change", "#deathWithin", function(e) { 
+					runSearch();
+				 });
+				 $(document).on("change", "#startVaxDate, #endVaxDate, #startDate, #endDate", function(e) { 
+					runSearch();
+				 });
+				 $(document).on("change", "#vaxDateOptsCheck", function(e) { 
+					if($(this).prop("checked")) {
+						$('#startVaxDate, #endVaxDate').removeAttr("disabled");
+					} else {
+						$('#startVaxDate, #endVaxDate').attr("disabled", "disabled");
+					}
+					runSearch();
+				 });
+				 $(document).on("change", "#reactDateOptsCheck", function(e) { 
+					if($(this).prop("checked")) {
+						$('#startDate, #endDate').removeAttr("disabled");
+					} else {
+						$('#startDate, #endDate').attr("disabled", "disabled");
+					}
+					runSearch();
+				 });
+				 $(document).on("keyup", "#searchBox", function(e) { 
+					if(window.hasOwnProperty("searchTimeout") || window.searchTimeout != null ) {
+						window.clearTimeout(window.searchTimeout);
+					}
+					 if(e.which ==13) {
+						runSearch();
+					 } else {
+						window.searchTimeout = window.setTimeout(runSearch, 500);
+					 }
+					
+				 });
+				 $(document).on("change", "#onlyShowDeathsCheck", function() {
+					if($(this).prop("checked")) {
+						$('#showColumnCheckDeath:not(:checked)').click();
+					}
+					runSearch();
+				 });
+				 $(document).on("click", ".dwnImg", function() {
+					var rowData = table.row($(this).closest("tr")).data();
+					var fSize = 26;
+					if(rowData.t.length < 33) {
+						fSize = 125;
+					} else if(rowData.t.length < 106) {
+						fSize = 95;
+					} else if(rowData.t.length < 199) {
+						fSize = 84;
+					} else if(rowData.t.length < 394) {
+						fSize = 70;
+					} else if(rowData.t.length < 665) {
+						fSize = 61;
+					} else if(rowData.t.length < 935) {
+						fSize = 52;
+					} else if(rowData.t.length < 1374) {
+						fSize = 43;
+					} else if(rowData.t.length < 1812) {
+						fSize = 34;
+					} else if(rowData.t.length < 2609) {
+						fSize = 30;
+					} else if(rowData.t.length < 3406) {
+						fSize = 26;
+					}
+					$('#symptomText').text(rowData.t).css("font-size", fSize + "px");
+					var ptInfo = [];
+					if(rowData.s == "M") {
+						ptInfo.push("Male");
+					}
+					if(rowData.s == "F") {
+						ptInfo.push("Female");
+					}
+					if(rowData.a != "" && rowData.a > 0) {
+						ptInfo.push(rowData.a + " years old");
+					}
+					$('#patientDetails').text(ptInfo.join(", "));
+					var reportDataLine = ["VAERS Report #" + rowData.i];
+					if(rowData.vd != '') {
+						reportDataLine.push("Vax Date: " + rowData.vdR);
+					}
+					
+					if(rowData.dh != '') {
+						reportDataLine.push(rowData.dh);
+					} else if(rowData.vd != '') {
+						reportDataLine.push("Onset Date: " + rowData.dR);
+					}
+					$('#reportDateLine').text(reportDataLine.join(", "));
+					html2canvas(document.getElementById("memeHolder")).then(function(canvas) {
+						canvas.toBlob(function(blob) {
+							saveAs(blob, "vaers-" + rowData.i + ".png"); 
+						});
+					});
+				});
+				var curDate = new Date();
+				var mnth = "" + (curDate.getMonth()+1);
+				if(mnth.length == 1) {
+					mnth = "0" + mnth;
+				}
+				var dateStr = "" + curDate.getDate();
+				if(dateStr.length == 1) {
+					dateStr = "0" + dateStr;
+				}
+				$('#endDate, #endVaxDate').val(curDate.getFullYear() + '-' + mnth + '-' + dateStr)
+			});
+			
+			function startBrowse(startCmd) {
+				if(startCmd == "deaths") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
+				} else if(startCmd == "deaths1Week") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
+					$('#deathWithin').val("7");
+				}
+				$('#home').fadeOut(111);
+				window.setTimeout(function() {
+					$('#mainStage').fadeIn(333);
+				}, 111);
+				loadAllVaersData(browseAllData);
+			}
+			
+			function runSearch() {
+				var searchText = $('#searchBox').val();
+				var searchPhrases = searchText.split(/AND|OR/) ;
+				var onlyShowDeaths = $('#onlyShowDeathsCheck').prop("checked");
+				var deathWithin = $('#deathWithin').val();
+				var startVaxDate = $('#startVaxDate').val();
+				var endVaxDate = $('#endVaxDate').val();
+				var startDate = $('#startDate').val();
+				var endDate = $('#endDate').val();
+				if(deathWithin != "all") {
+					deathWithin = parseInt(deathWithin);
+				}
+				var reactDateOpts = $('#reactDateOptsCheck').prop("checked");
+				var vaxDateOpts = $('#vaxDateOptsCheck').prop("checked");
+				
+				var results = [];
+				for(var vId in allData) {
+					if(allData.hasOwnProperty(vId)) {
+						var rec = allData[vId];
+						var include = true;
+						var textLwr = rec[dataInds.text].toLowerCase();
+						if(searchPhrases.length == 1) {
+							if(textLwr.indexOf(searchPhrases[0].toLowerCase()) == -1) {
+								include = false;
+							}
+						} else if(searchPhrases.length > 1) {
+							var searchTextRepl = searchText;
+							for(var i = 0; i < searchPhrases.length; i++) {
+								var phrase = searchPhrases[i].trim();
+								var phraseFound = ((textLwr.indexOf(phrase.toLowerCase())) != -1);
+								searchTextRepl = searchTextRepl.replace(phrase, JSON.stringify(phraseFound));
+							}
+							searchTextRepl = searchTextRepl.split("OR").join("||");
+							searchTextRepl = searchTextRepl.split("AND").join("&&");
+							if(!eval(searchTextRepl)) {
+								include = false;
+							}
+						}
+						
+						if(onlyShowDeaths) {
+							if(deathWithin == "all") {
+								if(rec[dataInds.died] == "") {
+									include = false;
+								}
+							} else {
+								if(rec[dataInds.died] == "Y") {
+									include = false;
+								} else {
+									var daysAfter = diffBetweenDates(rec[dataInds.vaxDate], rec[dataInds.died]);
+									//console.log(rec[dataInds.vaxDate] + " " + rec[dataInds.died] +  "   " + daysAfter + "  <= " + deathWithin);
+									if(daysAfter == false) {
+										include = false;
+									} else if(daysAfter > deathWithin) {
+										include = false;
+									}
+								}
+							}
+						}
+						
+						if(reactDateOpts) {
+							if(rec[dataInds.date] == "") {
+								include = false
+							} else {
+								var dayDiff1 = diffBetweenDates(startDate, rec[dataInds.date]);
+								var dayDiff2 = diffBetweenDates(rec[dataInds.date], endDate);
+								if(dayDiff1 < 0 || dayDiff2 < 0) {
+									include = false;
+								}
+							}
+						}
+						
+						if(vaxDateOpts) {
+							if(rec[dataInds.vaxDate] == "") {
+								include = false
+							} else {
+								var dayDiff1 = diffBetweenDates(startVaxDate, rec[dataInds.vaxDate]);
+								var dayDiff2 = diffBetweenDates(rec[dataInds.vaxDate], endVaxDate);
+								if(dayDiff1 < 0 || dayDiff2 < 0) {
+									include = false;
+								}
+							}
+						}
+						
+						var deathStr = rec[dataInds.died];
+						if(deathStr == "Y") {
+							deathStr = "DIED";
+						} else if(deathStr.length > 0) {
+							deathStr = "DIED ON " + deathStr;
+						}
+						
+						
+						var ltStr = rec[dataInds.lifeThreat];
+						if(ltStr == "Y") {
+							ltStr = "YES";
+						}
+						var edStr = rec[dataInds.lifeThreat];
+						if(edStr == "Y") {
+							edStr = "YES";
+						}
+						
+						//text: 0, age: 1, sex: 2, vaxDate: 3, date: 4, died: 5, hosp: 6, erEd: 7, lifeThreat: 8, disabled: 9, vaxManu: 10
+						if(include) {
+							var age = rec[dataInds.age];
+							if(age == 0) {
+								age = "";
+							}
+							results.push({
+								i:vId,
+								t:rec[dataInds.text],
+								a:age,
+								s:rec[dataInds.sex],
+								vdR:rec[dataInds.vaxDate],
+								vd:dtDateWrap(rec[dataInds.vaxDate]),
+								d:dtDateWrap(rec[dataInds.date]),
+								dR:rec[dataInds.date],
+								dh:deathStr,
+								lt:ltStr,
+								ed:edStr,
+								opts:'<div class="dwnImg"><i class="fa fa-download"></i> Image</div>'
+							});
+						}
+					}
+				}
+				table.clear().draw();
+				table.rows.add(results);
+				table.columns.adjust().draw();
+			}
+			function dtDateWrap(dateStr) {
+				var ts = 0;
+				var date = new Date(dateStr);
+				if(!isNaN(date)) {
+					var mnth = "" + (date.getMonth()+1);
+					if(mnth.length == 1) {
+						mnth = "0" + mnth;
+					}
+					var dSt = "" + date.getDate();
+					if(dSt.length == 1) {
+						dSt = "0" + dSt;
+					}
+					ts = date.getFullYear() + "-" + mnth + "-" + dSt;
+				}
+				return dateStr;
+				//return '<div class="dateSort">' + ts + "</div>" + dateStr;
+			}
+			function diffBetweenDates(date1Str, date2Str) {
+				var date1 = new Date(date1Str);
+				var date2 = new Date(date2Str);
+				if(isNaN(date1) || isNaN(date2)) {
+					return false;
+				}
+				var diffTime = date2 - date1;
+				return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+			}
+			function loadVaersData(callback) {
+				$.ajax({
+					url:dataFiles[dataFileLoadNum],
+					cache:false, //change to true
+					method:"GET",
+					callback:callback
+				}).done(function(msg) {
+					dataFileLoadNum++;
+					allDataTxt += msg;
+					if(dataFileLoadNum == dataFiles.length) {
+						allData = JSON.parse(allDataTxt);
+						allDataTxt = "";
+						if(this.hasOwnProperty("callback") && this.callback != null) {
+							this.callback();
+						}
+					} else {
+						loadVaersData(this.callback);
+					}
+				});
+			}
+			function loadAllVaersData(callback) {
+				$.ajax({
+					url:"allVaersRecords.txt",
+					cache:false, //change to true
+					method:"GET",
+					callback:callback
+				}).done(function(msg) {
+					allData = JSON.parse(msg);
+					if(this.hasOwnProperty("callback") && this.callback != null) {
+						this.callback();
+					}
+				});
+			}
+			
+			function browseAllData() {
+				var tblHeight = $('#mainStage').height() - tblHeightOffset;
+				var columns = [
+						{ data: "i", title: "Id #"},
+						{ data: "t", title: "Report Text" },
+						{ data: "vd", title: "Vax Date" },
+						{ data: "d", title: "Date" },
+						{ data: "a", title: "Age" },
+						{ data: "s", title: "Sex" },
+						{ data: "dh", title: "Death?" },
+						{ data: "lt", title: "Life Threatening?" },
+						{ data: "ed", title: "ER/ED Visit?" },
+						{ data: "opts", title: "Download", className:"downloadCol" }
+					];
+				table = $('#adverseEventsTable').DataTable({
+					data: [],
+					scrollY: tblHeight,
+					dom:"rtRSiB",
+					columns: columns,
+					columnDefs: [ {
+							"targets": [ 6,7,8 ],
+							"visible": false
+						}, {
+						render: function (data, type, full, meta) {
+							return "<div class='text-wrap' style=\"max-width:100%;width:800px\">" + data + "</div>";
+						},
+						targets: 1
+					}],
+					buttons: [
+						{
+							extend: 'copyHtml5',
+							exportOptions: {
+								columns: ':visible:not(.downloadCol)'
+							}
+						},
+						{
+							extend: 'excelHtml5',
+							exportOptions: {
+								columns: ':visible:not(.downloadCol)'
+							}
+						},
+						{
+							extend: 'pdfHtml5',
+							exportOptions: {
+								columns: ':visible:not(.downloadCol)'
+							}
+						}
+					],
+					deferRender: true,
+					scroller: true
+				});
+				if(window.hasOwnProperty("responsiveInt") && window.responsiveInt != null) {
+					window.clearInterval(responsiveInt);
+				}
+				window.screenDims = { w:$(window).width(), h:$(window).height() };
+				window.responsiveInt = window.setInterval(function() {
+					var sW = $(window).width();
+					var sH = $(window).height();
+					if(window.screenDims.w != sW || window.screenDims.h != sH) {
+						window.screenDims = { w:sW, h:sH };
+						$('div.dataTables_scrollBody').height($('#mainStage').height() - tblHeightOffset);
+					}
+				}, 2000);
+				if($('#showColumnCheckDeath').is(":checked")) {
+					table.column(6).visible(true);
+				}
+				runSearch();
+			}
+		</script>
+		<style type="text/css">
+			html, body {
+				position:absolute;
+				left:0;
+				right:0;
+				bottom:0;
+				top:0;
+				width:100%;
+				height:100%;
+				margin:0;
+				padding:0;
+				display:inline-block;
+				font-family: 'Roboto', sans-serif;
+				overflow:hidden;
+				background:black
+			}
+			#header, .mainStage, #footer {
+				position:absolute;
+				left:0;
+				right:0;
+				width:100%;
+				background:#003e9f;
+				display:inline-block;
+				z-index:10
+			}
+			#header {
+				height:40px;
+				top:0;
+			}
+			.mainStage {
+				top:40px;
+				bottom:22px;
+				color:white !important;
+				background:#121212;
+				color: white !important
+			}
+			#footer {
+				height:22px;
+				bottom:0;
+				padding-top:4px;
+				background:black;
+				color:#dedede !important;
+				text-align:center;
+			}
+			#footer a {
+				color:white !important
+			}
+			table.dataTable thead th {
+				color: white;
+				text-align: left;
+			}
+			table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+				background-color: #1a1a1a;
+				color: white;
+			}
+			table.dataTable.stripe tbody tr.even, table.dataTable.display tbody tr.even {
+				background-color: #131313;
+				color: white;
+			}
+			table.dataTable.display tbody tr:hover > .sorting_1, table.dataTable.order-column.hover tbody tr:hover > .sorting_1 {
+				background-color: black;
+			}
+			table.dataTable.display tbody tr.odd > .sorting_1, table.dataTable.order-column.stripe tbody tr.odd > .sorting_1 {
+				background-color: #010101;
+			}
+			table.dataTable.display tbody tr.even > .sorting_1, table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
+				background-color: #0c0c0c;
+			}
+			table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
+				border-top: 1px solid #2b2b2b;
+			}
+			.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+				color: #acacac;
+			}
+			button.dt-button, button.dt-button:hover, div.dt-button, a.dt-button, input.dt-button {
+				color: white;
+				background: #005dae;
+			}
+			.dt-buttons {
+				float: right !important;
+				padding-top: 10px;
+			}
+			.text-wrap{
+				white-space:normal;
+			}
+			#searchBox {
+				font-size: 23px;
+				width: 697px;
+				border-radius: 5px;
+				max-width: 100%;
+				padding: 6px 11px;
+			}
+			.colOpt {
+				padding-left:6px;
+				padding-right:6px;
+				font-size:14px;
+			}
+			.colOpt input {
+				padding-right:2px
+			}
+			.dwnImg {
+				display:inine-block;
+				padding:2px 4px;
+				cursor:pointer;
+			}
+			#searchFilters input, #searchFilters select, #searchFilters select option {
+				background: transparent;
+				color: white !important;
+				border-color:rgba(255, 255, 255, .3)
+			}
+			#searchFilters select option {
+				background:black !important
+			}
+			div.dts div.dataTables_scrollBody {
+				background: repeating-linear-gradient(45deg, #040404, #0f0f0f 10px, #0b0b0b 10px, #000 20px);
+			}
+			#reportDateLine, #patientDetails {
+				font-size:29px;
+			}
+			#reportDateLine, #symptomText, #patientDetails {
+				text-align:center;
+				color:white;
+				text-shadow:3px 3px 4px black, 3px 3px 4px black, 3px 3px 4px black, 3px 3px 4px black, 3px 3px 8px black, 3px 3px 10px black, 0px 0px 24px black, 0px 0px 35px black, 0px 0px 48px black;
+			}
+			input[disabled] {
+				background: #424242 !important;
+				color: rgba(255,255,255,.3) !important;
+			}
+			.dateSort{
+				position:fixed;
+				top:-100px;
+				left:-100px;
+			}
+			.bigBlueHomeBtn {
+				display: inline-block;
+				background: #003c9a;
+				color: white;
+				padding: 12px 20px;
+				border-radius: 20px;
+				cursor: pointer;
+				font-size: 24px;
+			}
+			a.videoReport {
+				float:left;
+				padding:3px 5px;
+			}
+			a.videoReport, a.videoReport img {
+				width: 300px;
+			}
+			a.videoReport .vidTitle {
+				color:white !important;
+				font-weight:bold;
+				font-size:19px
+			}
+		</style>
+	</head>
+	<body>
+	<!--left:-1760px-->
+		<div id="memeHolder" style="position:fixed; left:-2000px; top:0; width:1760px; height:990px; background-image:url(VAERSBg.jpg); background-size:cover; background-position:center center; background-repeat:none">
+			<table style="width:100%; height:100%">
+				<tbody>
+					<tr>
+						<td style="vertical-align:middle">
+							<div id="memeStage" style="padding-left:10px; padding-right:10px">
+								<div id="symptomText" style="font-size:95px"></div>
+								<div id="patientDetails" style="margin-top:10px; margin-bottom:6px"></div>
+								<div id="reportDateLine"></div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="header">
+			<table style="width:100%">
+				<tbody>
+					<tr>
+						<td style="color: white; font-size: 24px; font-weight:bold; padding-top:3px;">VAERS Covid Vax Records</td>
+						<td id="reportSelTd" style="display:none; color:white; font-size:20px; text-align:right">Report: <select id="reportSel" style="font-size:19px">
+							<option value="overview">Overview</option>
+							<option value="deaths">Died After Covid Shot</option>
+							<option value="hospitalized">Hospitalized After Covid Shot</option>
+							<option value="deaths">Emergency Room After Covid Shot</option>
+							<option value="browse">Browse All Data</option>
+						</select></td>
+						<td style="display:none"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="home" class="mainStage" style="overflow-y:auto">
+			<center>
+					<h2 style="margin-top:35px">Browse Data:</h2>
+					<div style="padding-top:3px">
+						<div onclick="startBrowse()" class="bigBlueHomeBtn">Browse All Data</div>
+						<div onclick="startBrowse('deaths')" class="bigBlueHomeBtn">Browse All Deaths</div>
+						<div onclick="startBrowse('deaths1Week')" class="bigBlueHomeBtn">Deaths Within 1 Week</div>
+					</div>
+					<h2 style="margin-top:35px">Video Reports:</h2>
+					<div style="margin-top:20px">
+						<div style="display:inline-block">
+							<a class="videoReport" style="display:inline-block" href="https://www.youtube.com/watch?v=h70itX1u6x4" target="_blank">
+								<img src="https://i.ytimg.com/vi/h70itX1u6x4/hqdefault.jpg" />
+								<div class="vidTitle">500+ Reported Cases of Numbness, Paralysis, or Bell's Palsy After Covid Vacx; VAERS Data Walkthrough</div>
+							</a>
+							<a class="videoReport" style="display:inline-block" href="https://www.youtube.com/watch?v=CelM4ldjnRM" target="_blank">
+								<img src="https://i.ytimg.com/vi/CelM4ldjnRM/hqdefault.jpg" />
+								<div class="vidTitle">HHS VAERS Data: Why So Many Deaths Just Hours After Vacx? Is It Related Or Unrelated? You Decide!</div>
+							</a>
+							<a class="videoReport" style="display:inline-block" href="https://www.youtube.com/watch?v=s6HNkSw1d4E" target="_blank">
+								<img src="https://i.ytimg.com/vi/s6HNkSw1d4E/hqdefault.jpg" />
+								<div class="vidTitle">VAERS: Shaking, Seizures & Passing Out: People Losing Control Of Their Bodies Within Hours Of Vaxcs?</div>
+							</a>
+							<div style="clear:both"></div>
+						</div>
+					</div>
+			</center>
+		</div>
+		<div id="mainStage" class="mainStage" style="display:none">
+			<div id="searchFilters">
+				<center>
+					<div style="display:inline-block">
+						<div style="float:left; padding:5px">
+							<input id="searchBox" type="text" placeholder="Search Query (Supports AND, OR)" />
+							<div>
+								<div class="colOpt" style="float:left;">
+									<input id="showColumnCheckId" type="checkbox" class="showColumnCheck" col="id" checked /> <label for="showColumnCheckId">ID</label>
+								</div>
+								<div class="colOpt" style="float:left;">
+									<input id="showColumnCheckText" type="checkbox" class="showColumnCheck" col="text" checked /> <label for="showColumnCheckText">Text</label>
+								</div>
+								<div class="colOpt" style="float:left;">
+									<input id="showColumnCheckVaxDate" type="checkbox" class="showColumnCheck" col="vaxDate" checked /> <label for="showColumnCheckVaxDate">Vax Date</label>
+								</div>
+								<div class="colOpt" style="float:left;">
+									<input id="showColumnCheckDate" type="checkbox" class="showColumnCheck" col="date" checked /> <label for="showColumnCheckDate">Date</label>
+								</div>
+								<div class="colOpt" style="float:left;">
+									<input id="showColumnCheckAge" type="checkbox" class="showColumnCheck" col="age" checked /> <label for="showColumnCheckAge">Age</label>
+								</div>
+								<div class="colOpt" style="float:left;">
+									<input id="showColumnCheckSex" type="checkbox" class="showColumnCheck" col="sex" checked /> <label for="showColumnCheckSex">Sex</label>
+								</div>
+								<div class="colOpt" style="float:left;">
+									<input id="showColumnCheckDeath" type="checkbox" class="showColumnCheck" col="death" /> <label for="showColumnCheckDeath">Death</label>
+								</div>
+								<div class="colOpt" style="float:left;">
+									<input id="showColumnCheckLifeThreatening" type="checkbox" class="showColumnCheck" col="lifeThreatening" /> <label for="showColumnCheckLifeThreatening">Life Threatening</label>
+								</div>
+								<div class="colOpt" style="float:left;">
+									<input id="showColumnCheckErEdVisit" type="checkbox" class="showColumnCheck" col="erEdVisit" /> <label for="showColumnCheckErEdVisit">ER/ ED Visit</label>
+								</div>
+								<div style="clear:both;"></div>
+							</div>
+						</div>
+						<div style="float:left; padding:3px">
+							<div>
+								<input type="checkbox" id="vaxDateOptsCheck" /> <label for="vaxDateOptsCheck">Got Vaccine Between:</label> <input type="date" id="startVaxDate" disabled value="2020-12-01" /> and <input type="date" id="endVaxDate" disabled />
+							</div>
+							<div>
+								<input type="checkbox" id="reactDateOptsCheck" /> <label for="reactDateOptsCheck">AE Between:</label> <input type="date" id="startDate" disabled value="2020-12-01" /> and <input type="date" id="endDate" disabled />
+							</div>
+							<div>
+								<input type="checkbox" id="onlyShowDeathsCheck" /> <label for="onlyShowDeathsCheck">Only Show Deaths</label> <select id="deathWithin">
+									<option value="all" selected>All Deaths</option>
+									<option value="0">Same Day</option>
+									<option value="1">Within 1 Day</option>
+									<option value="2">Within 2 Days</option>
+									<option value="3">Within 3 Days</option>
+									<option value="4">Within 4 Days</option>
+									<option value="5">Within 5 Days</option>
+									<option value="7">Within 7 Days</option>
+									<option value="14">Within 14 Days</option>
+									<option value="30">Within 30 Days</option>
+								</select>
+							</div>
+						</div>
+						<div style="clear:both"></div>
+					</div>
+				</center>
+			</div>
+			<table id="adverseEventsTable" class="display" width="100%"></table>
+		</div>
+		<div id="footer">Data provided "as is". Adverse Events not necessarily caused by vaccines.  Not all adverse events in database.  Visit <a href="https://vaers.hhs.gov/data.html" target="_blank">VAERS</a> for their disclaimer and latest data &amp; downloads</div>
+	</body>
+</html>
