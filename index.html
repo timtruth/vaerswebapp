@@ -358,7 +358,7 @@
 			function loadVaersData(callback) {
 				$.ajax({
 					url:dataFiles[dataFileLoadNum],
-					cache:false, //change to true
+					cache:true,
 					method:"GET",
 					callback:callback
 				}).done(function(msg) {
@@ -377,8 +377,8 @@
 			}
 			function loadAllVaersData(callback) {
 				$.ajax({
-					url:"allVaersRecords.txt",
-					cache:false, //change to true
+					url:"allVaersRecords-1-29.txt",
+					cache:true,
 					method:"GET",
 					callback:callback
 				}).done(function(msg) {
