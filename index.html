@@ -194,6 +194,9 @@
 				} else if(startCmd == "deaths1Week") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
 					$('#deathWithin').val("7");
+				} else if(startCmd == "deaths0Days") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
+					$('#deathWithin').val("1");
 				}
 				$('#home').fadeOut(111);
 				window.setTimeout(function() {
@@ -595,10 +598,10 @@
 				display: inline-block;
 				background: #003c9a;
 				color: white;
-				padding: 12px 20px;
+				padding: 10px 16px;
 				border-radius: 20px;
 				cursor: pointer;
-				font-size: 24px;
+				font-size: 26px;
 			}
 			a.videoReport {
 				float:left;
@@ -650,13 +653,14 @@
 		</div>
 		<div id="home" class="mainStage" style="overflow-y:auto">
 			<center>
-					<h2 style="margin-top:35px">Browse Data:</h2>
+					<h1 style="margin-top:35px; font-size:39px">Browse Data:</h1>
 					<div style="padding-top:3px">
 						<div onclick="startBrowse()" class="bigBlueHomeBtn">Browse All Data</div>
 						<div onclick="startBrowse('deaths')" class="bigBlueHomeBtn">Browse All Deaths</div>
 						<div onclick="startBrowse('deaths1Week')" class="bigBlueHomeBtn">Deaths Within 1 Week</div>
+						<div onclick="startBrowse('deaths0Days')" class="bigBlueHomeBtn">Deaths On Vax Day</div>
 					</div>
-					<h2 style="margin-top:35px">Video Reports:</h2>
+					<h2 style="margin-top:65px">Video Reports:</h2>
 					<div style="margin-top:20px">
 						<div style="display:inline-block">
 							<a class="videoReport" style="display:inline-block" href="https://www.youtube.com/watch?v=h70itX1u6x4" target="_blank">
