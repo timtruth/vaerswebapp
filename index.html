@@ -187,7 +187,29 @@
 				}
 				$('#endDate, #endVaxDate').val(curDate.getFullYear() + '-' + mnth + '-' + dateStr)
 			});
-			
+			function switchToBrowse() {
+				$('#home').fadeOut(111);
+				window.setTimeout(function() {
+					$('#mainStage').fadeIn(333);
+				}, 111);
+			}
+			function switchToHome() {
+				$('#mainStage').fadeOut(111);
+				window.setTimeout(function() {
+					$('#home').fadeIn(333);
+				}, 111);
+			}
+			function toggleHomeBrowse() {
+				if($('#mainStage').is(":visible")) {
+					switchToHome();
+				} else {
+					if(allData == null) {
+						startBrowse();
+					} else {
+						switchToBrowse();
+					}
+				}
+			}
 			function startBrowse(startCmd) {
 				if(startCmd == "deaths") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
@@ -198,11 +220,10 @@
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
 					$('#deathWithin').val("0");
 				}
-				$('#home').fadeOut(111);
+				switchToBrowse();
 				window.setTimeout(function() {
-					$('#mainStage').fadeIn(333);
-				}, 111);
-				loadAllVaersData(browseAllData);
+					loadAllVaersData(browseAllData);
+				}, 234);
 			}
 			
 			function runSearch() {
@@ -638,14 +659,15 @@
 			<table style="width:100%">
 				<tbody>
 					<tr>
-						<td style="color: white; font-size: 24px; font-weight:bold; padding-top:3px;">VAERS Covid Vax Records</td>
+						<td style="color: white; font-size: 24px; font-weight:bold; padding-top:3px; cursor:pointer; padding-left:5px;" onclick="toggleHomeBrowse()">VAERS Covid Vax Records</td>
 						<td id="reportSelTd" style="display:none; color:white; font-size:20px; text-align:right">Report: <select id="reportSel" style="font-size:19px">
 							<option value="overview">Overview</option>
 							<option value="deaths">Died After Covid Shot</option>
 							<option value="hospitalized">Hospitalized After Covid Shot</option>
 							<option value="deaths">Emergency Room After Covid Shot</option>
 							<option value="browse">Browse All Data</option>
-						</select></td>
+						</select>
+						</td>
 						<td style="display:none"></td>
 					</tr>
 				</tbody>
