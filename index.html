@@ -62,6 +62,11 @@
 				disabled: 9,
 				vaxManu: 10
 			};
+			var searches = {
+				numbnessParalysis: 'numbness OR went numb OR felt numb OR totally numb OR lost sensation OR bell\'s OR bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy',
+				miscarriage: 'miscarriage OR stillbirth OR still birth OR stillborn OR still born',
+				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out'
+			};
 			$(document).ready(function() {
 				//loadAllVaersData(browseAllData);
 				//loadVaersData(browseAllData);
@@ -170,13 +175,17 @@
 						}
 					});
 					$('.swal-text').html(['<table id="searchIdeadTbl">',
-								'	<tr searchIdea="shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out">',
+								'	<tr searchIdea="' + searches.lostControl + '">',
 								'		<td><input class="searchIdeaCheck" type="radio" name="searchIdeaRadio" id="searchIdeaRadioLostControl"/></td>',
 								'		<td><label for="searchIdeaRadioLostControl">Seizures, Shaking Or Passing Out</label></td>',
 								'	</tr>',
-								'	<tr searchIdea="numbness OR went numb OR felt numb OR totally numb OR lost sensation OR bell\'s OR bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy">',
+								'	<tr searchIdea="' + searches.numbnessParalysis + '">',
 								'		<td><input class="searchIdeaCheck" type="radio" name="searchIdeaRadio" id="searchIdeaCheckNumbParalysis" /></td>',
 								'		<td><label for="searchIdeaCheckNumbParalysis">Numbness, Paralysis Or Bell\'s Palsy</label></td>',
+								'	</tr>',
+								'	<tr searchIdea="' + searches.miscarriage + '">',
+								'		<td><input class="searchIdeaCheck" type="radio" name="searchIdeaRadio" id="searchIdeaCheckMiscarriage" /></td>',
+								'		<td><label for="searchIdeaCheckMiscarriage">Miscarriage</label></td>',
 								'	</tr>',
 								'</table>'].join(""));
 					$('#searchIdeaRadioLostControl').click();
@@ -316,6 +325,16 @@
 				} else if(startCmd == "deaths0Days") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
 					$('#deathWithin').val("0");
+				} else if(startCmd == "lostControl") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#deathWithin').val("0");
+					$('#searchBox').val(searches.lostControl);
+				} else if(startCmd == "numbnessParalysis") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.numbnessParalysis);
+				} else if(startCmd == "miscarriage") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.miscarriage);
 				}
 				switchToBrowse();
 				window.setTimeout(function() {
@@ -342,6 +361,7 @@
 				for(var vId in allData) {
 					if(allData.hasOwnProperty(vId)) {
 						var rec = allData[vId];
+						var textStr = rec[dataInds.text];
 						var include = true;
 						var textLwr = rec[dataInds.text].toLowerCase();
 						if(searchPhrases.length == 1) {
@@ -354,6 +374,7 @@
 								var phrase = searchPhrases[i].trim();
 								var phraseFound = (((textLwr.indexOf(phrase.toLowerCase())) != -1) || (((vId+"").indexOf(phrase)) != -1));
 								searchTextRepl = searchTextRepl.replace(phrase, JSON.stringify(phraseFound));
+								textStr = replaceAll(textStr, phrase, '<b>' + phrase + '</b>');
 							}
 							searchTextRepl = searchTextRepl.split("OR").join("||");
 							searchTextRepl = searchTextRepl.split("AND").join("&&");
@@ -431,7 +452,7 @@
 							}
 							results.push({
 								i:vId,
-								t:rec[dataInds.text],
+								t:textStr,
 								a:age,
 								s:rec[dataInds.sex],
 								vdR:rec[dataInds.vaxDate],
@@ -502,6 +523,12 @@
 					}
 				});
 			}
+			function escapeRegExp(string) {
+			  return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+			}
+			function replaceAll(str, find, replace) {
+			  return str.replace(new RegExp(escapeRegExp(find), 'gi'), replace);
+			}
 			function loadAllVaersData(callback) {
 				$.ajax({
 					url:"allVaersRecords-1-29.txt",
@@ -539,7 +566,7 @@
 							"visible": false
 						}, {
 						render: function (data, type, full, meta) {
-							return "<div class='text-wrap' style=\"max-width:100%;width:800px\">" + data + "</div>";
+							return "<div class='text-wrap' style=\"max-width:100%;width:880px\">" + data + "</div>";
 						},
 						targets: 1
 					}],
@@ -803,8 +830,13 @@
 			<center>
 					<h1 style="margin-top:35px; font-size:39px">Browse Data:</h1>
 					<div style="padding-top:3px">
-						<div onclick="startBrowse()" class="bigBlueHomeBtn">Browse All Data</div>
-						<div onclick="startBrowse('deaths')" class="bigBlueHomeBtn">Browse All Deaths</div>
+						<div onclick="startBrowse()" class="bigBlueHomeBtn">All Data</div>
+						<div onclick="startBrowse('miscarriage')" class="bigBlueHomeBtn">Miscarriage</div>
+						<div onclick="startBrowse('lostControl')" class="bigBlueHomeBtn">Seizures, Shaking/ Passing Out</div>
+						<div onclick="startBrowse('numbnessParalysis')" class="bigBlueHomeBtn">Numbness/ Paralysis</div>
+					</div>
+					<div style="padding-top:3px">
+						<div onclick="startBrowse('deaths')" class="bigBlueHomeBtn">All Deaths</div>
 						<div onclick="startBrowse('deaths1Week')" class="bigBlueHomeBtn">Deaths Within 1 Week</div>
 						<div onclick="startBrowse('deaths0Days')" class="bigBlueHomeBtn">Deaths On Vax Day</div>
 					</div>
