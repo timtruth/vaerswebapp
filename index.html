@@ -39,13 +39,15 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.contextMenu.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
-
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		
 		<script type="text/javascript">
 			var allData;
 			var dataFiles = ["allVaersRecordsPart1.txt", "allVaersRecordsPart2.txt", "allVaersRecordsPart3.txt"];
 			var dataFileLoadNum = 0;
 			var allDataTxt = '';
 			var table;
+			var searchIdea;
 			var tblHeightOffset = 180;
 			var dataInds = {
 				text: 0,
@@ -124,6 +126,11 @@
 						"dwnlImg": {name: "Download Image", icon: "fa-download"}
 					}
 				});
+				 $(document).on("change", ".searchIdeaCheck", function() { 
+					if($(this).prop("checked") == true) {
+						window.searchIdea = $(this).closest("tr").attr("searchIdea")
+					}
+				 });
 				 $(document).on("change", ".showColumnCheck", function() { 
 					var isChk = $(this).prop("checked");
 					var col = $(this).attr("col");
@@ -150,6 +157,29 @@
 					if(column != null) {
 						column.visible( !column.visible() );
 					}
+				 });
+				 $(document).on("click", "#searchIdeasOpen", function(e) { 
+					window.searchIdea = null;
+					swal({
+						text:'a',
+						title:"Search Ideas:",
+						buttons:true
+					}).then(function(val) {
+						if(val !== null && searchIdea !== null) {
+							$('#searchBox').val(window.searchIdea).trigger("keyup");
+						}
+					});
+					$('.swal-text').html(['<table id="searchIdeadTbl">',
+								'	<tr searchIdea="shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out">',
+								'		<td><input class="searchIdeaCheck" type="radio" name="searchIdeaRadio" id="searchIdeaRadioLostControl"/></td>',
+								'		<td><label for="searchIdeaRadioLostControl">Seizures, Shaking Or Passing Out</label></td>',
+								'	</tr>',
+								'	<tr searchIdea="numbness OR went numb OR felt numb OR totally numb OR lost sensation OR bell\'s OR bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy">',
+								'		<td><input class="searchIdeaCheck" type="radio" name="searchIdeaRadio" id="searchIdeaCheckNumbParalysis" /></td>',
+								'		<td><label for="searchIdeaCheckNumbParalysis">Numbness, Paralysis Or Bell\'s Palsy</label></td>',
+								'	</tr>',
+								'</table>'].join(""));
+					$('#searchIdeaRadioLostControl').click();
 				 });
 				 $(document).on("change", "#deathWithin", function(e) { 
 					runSearch();
@@ -720,6 +750,16 @@
 			.context-menu-item:hover {
 				background-color: #010101 !important;
 			}
+			.swal-modal {
+				color: white !important;
+				background-color: #1a1a1a;
+			}
+			.swal-title {
+				color:white !important
+			}
+			#searchIdeadTbl tr td {
+				color:white
+			}
 		</style>
 	</head>
 	<body>
@@ -786,7 +826,7 @@
 							<div style="clear:both"></div>
 						</div>
 					</div>
-					<h2 style="margin-top:65px"><b>NEW!</b> Annecdotal Adverse Events:</h2>
+					<h2 style="margin-top:65px"><b>NEW!</b> Anecdotal Adverse Events:</h2>
 					<div>
 						<a target="_blank" style="display:inline-block; color:white !important" href="https://prezi.com/i/gw4zv2c_cwrb/anecdotal-experiences-cvv/">https://prezi.com/i/gw4zv2c_cwrb/anecdotal-experiences-cvv/</a>
 					</div>
@@ -797,7 +837,12 @@
 				<center>
 					<div style="display:inline-block">
 						<div style="float:left; padding:5px">
-							<input id="searchBox" type="text" placeholder="Search Query (Supports AND, OR)" />
+							<div style="width:100%; position:relative">
+								<input id="searchBox" type="text" placeholder="Search Query (Supports AND, OR)" />
+								<div style="position:absolute; position: absolute; right: 12px; top: 8px;">
+									<i id="searchIdeasOpen" class="fa fa-lightbulb" title="Search Ideas" style="color:#d5d500; font-size:27px; cursor:pointer"></i>
+								</div>
+							</div>
 							<div>
 								<div class="colOpt" style="float:left;">
 									<input id="showColumnCheckId" type="checkbox" class="showColumnCheck" col="id" checked /> <label for="showColumnCheckId">ID</label>
