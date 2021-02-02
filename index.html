@@ -319,12 +319,15 @@
 			function startBrowse(startCmd) {
 				if(startCmd == "deaths") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
+					$('#searchBox').val('');
 				} else if(startCmd == "deaths1Week") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
 					$('#deathWithin').val("7");
+					$('#searchBox').val('');
 				} else if(startCmd == "deaths0Days") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
 					$('#deathWithin').val("0");
+					$('#searchBox').val('');
 				} else if(startCmd == "lostControl") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
 					$('#deathWithin').val("0");
@@ -336,10 +339,15 @@
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
 					$('#searchBox').val(searches.miscarriage);
 				}
-				switchToBrowse();
-				window.setTimeout(function() {
-					loadAllVaersData(browseAllData);
-				}, 234);
+				if(allData == null) {
+					switchToBrowse();
+					window.setTimeout(function() {
+						loadAllVaersData(browseAllData);
+					}, 234);
+				} else {
+					runSearch();
+					switchToBrowse();
+				}
 			}
 			
 			function runSearch() {
@@ -655,6 +663,7 @@
 				background:black;
 				color:#dedede !important;
 				text-align:center;
+				font-size:12px;
 			}
 			#footer a {
 				color:white !important
@@ -863,7 +872,7 @@
 						<a target="_blank" style="display:inline-block; color:white !important" href="https://prezi.com/i/gw4zv2c_cwrb/anecdotal-experiences-cvv/">https://prezi.com/i/gw4zv2c_cwrb/anecdotal-experiences-cvv/</a>
 					</div>
 					<h2 style="margin-top:65px">Regulatory Documents About Safety Concerns:</h2>
-					<div>
+					<div style="margin-bottom:40px">
 						<a target="_blank" style="display:inline-block; color:white !important; margin:3px" href="https://www.cdc.gov/vaccines/covid-19/info-by-product/pfizer/reactogenicity.html">CDC Pfizer/BioNTech Vax Reaction Rates</a>
 						<a target="_blank" style="display:inline-block; color:white !important; margin:3px" href="https://www.fda.gov/media/144434/download">Moderna Vax FDA Filing</a>
 						<a target="_blank" style="display:inline-block; color:white !important; margin:3px" href="https://www.fda.gov/media/144245/download">Pfizer/BioNTech Vax FDA Filing</a>
