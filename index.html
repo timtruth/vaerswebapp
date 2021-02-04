@@ -65,8 +65,10 @@
 			var searches = {
 				numbnessParalysis: 'numbness OR went numb OR felt numb OR totally numb OR lost sensation OR bell\'s OR bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy',
 				miscarriage: 'miscarriage OR stillbirth OR still birth OR stillborn OR still born',
-				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out'
+				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out',
+				heartAttack: 'heart attack OR heart-attack OR cardiac arrest OR cardiac-arrest OR myocardial infarction OR heart failure OR heart-failure OR coronary thrombosis OR heart failure'
 			};
+			searches.heartIssues = searches.heartAttack + " OR heart palpitation OR tachycardia OR coronary OR cardiovascular disease OR heart defects OR heart defect OR cardiomyopathy";
 			$(document).ready(function() {
 				//loadAllVaersData(browseAllData);
 				//loadVaersData(browseAllData);
@@ -186,6 +188,14 @@
 								'	<tr searchIdea="' + searches.miscarriage + '">',
 								'		<td><input class="searchIdeaCheck" type="radio" name="searchIdeaRadio" id="searchIdeaCheckMiscarriage" /></td>',
 								'		<td><label for="searchIdeaCheckMiscarriage">Miscarriage</label></td>',
+								'	</tr>',
+								'	<tr searchIdea="' + searches.heartIssues + '">',
+								'		<td><input class="searchIdeaCheck" type="radio" name="searchIdeaRadio" id="searchIdeaCheckHeartIssues" /></td>',
+								'		<td><label for="searchIdeaCheckHeartIssues">Heart Issues</label></td>',
+								'	</tr>',
+								'	<tr searchIdea="' + searches.heartAttack + '">',
+								'		<td><input class="searchIdeaCheck" type="radio" name="searchIdeaRadio" id="searchIdeaCheckHeartAttack" /></td>',
+								'		<td><label for="searchIdeaCheckHeartAttack">Heart Attack/ Cardiac Arrest</label></td>',
 								'	</tr>',
 								'</table>'].join(""));
 					$('#searchIdeaRadioLostControl').click();
@@ -338,6 +348,12 @@
 				} else if(startCmd == "miscarriage") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
 					$('#searchBox').val(searches.miscarriage);
+				} else if(startCmd == "heartIssues") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.heartIssues);
+				} else if(startCmd == "heartAttack") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.heartAttack);
 				}
 				if(allData == null) {
 					switchToBrowse();
@@ -844,6 +860,8 @@
 					<div style="padding-top:3px">
 						<div onclick="startBrowse()" class="bigBlueHomeBtn">All Data</div>
 						<div onclick="startBrowse('miscarriage')" class="bigBlueHomeBtn">Miscarriage</div>
+						<div onclick="startBrowse('heartIssues')" class="bigBlueHomeBtn">Heart Issues</div>
+						<div onclick="startBrowse('heartAttack')" class="bigBlueHomeBtn">Heart Attack</div>
 						<div onclick="startBrowse('lostControl')" class="bigBlueHomeBtn">Seizures, Shaking/ Passing Out</div>
 						<div onclick="startBrowse('numbnessParalysis')" class="bigBlueHomeBtn">Numbness/ Paralysis</div>
 					</div>
