@@ -345,8 +345,10 @@
 						loadAllVaersData(browseAllData);
 					}, 234);
 				} else {
-					runSearch();
 					switchToBrowse();
+					window.setTimeout(function() {
+						runSearch();
+					}, 350);
 				}
 			}
 			
@@ -474,7 +476,7 @@
 						}
 					}
 				}
-				table.clear().draw();
+				table.clear();
 				table.rows.add(results);
 				table.columns.adjust().draw();
 				var infoText = results.length;
@@ -484,6 +486,7 @@
 					infoText += " Records";
 				}
 				$('#tableInfo').text(infoText);
+				table.scroller().scrollToRow(0);
 			}
 			function dtDateWrap(dateStr) {
 				var ts = 0;
