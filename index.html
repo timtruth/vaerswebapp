@@ -327,7 +327,10 @@
 				}
 			}
 			function startBrowse(startCmd) {
-				if(startCmd == "deaths") {
+				if(startCmd == null) {
+					$('#searchBox').val('');
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+				} else if(startCmd == "deaths") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
 					$('#searchBox').val('');
 				} else if(startCmd == "deaths1Week") {
@@ -858,12 +861,16 @@
 			<center>
 					<h1 style="margin-top:35px; font-size:39px">Browse Data:</h1>
 					<div style="padding-top:3px">
-						<div onclick="startBrowse()" class="bigBlueHomeBtn">All Data</div>
+						<div onclick="startBrowse()" class="bigBlueHomeBtn" style="font-size: 36px;padding: 12px 31px;">All Data</div>
+					</div>
+					<div style="padding-top:30px">
+						<div onclick="startBrowse('lostControl')" class="bigBlueHomeBtn">Seizures, Shaking/ Passing Out</div>
+						<div onclick="startBrowse('numbnessParalysis')" class="bigBlueHomeBtn">Numbness/ Paralysis</div>
+					</div>
+					<div style="padding-top:3px">
 						<div onclick="startBrowse('miscarriage')" class="bigBlueHomeBtn">Miscarriage</div>
 						<div onclick="startBrowse('heartIssues')" class="bigBlueHomeBtn">Heart Issues</div>
 						<div onclick="startBrowse('heartAttack')" class="bigBlueHomeBtn">Heart Attack</div>
-						<div onclick="startBrowse('lostControl')" class="bigBlueHomeBtn">Seizures, Shaking/ Passing Out</div>
-						<div onclick="startBrowse('numbnessParalysis')" class="bigBlueHomeBtn">Numbness/ Paralysis</div>
 					</div>
 					<div style="padding-top:3px">
 						<div onclick="startBrowse('deaths')" class="bigBlueHomeBtn">All Deaths</div>
