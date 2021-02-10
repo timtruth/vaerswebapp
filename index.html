@@ -99,7 +99,7 @@
 							} else if(rowData.t.length < 3406) {
 								fSize = 26;
 							}
-							$('#symptomText').text(rowData.t).css("font-size", fSize + "px");
+							$('#symptomText').html(rowData.t).css("font-size", fSize + "px");
 							var ptInfo = [];
 							if(rowData.s == "M") {
 								ptInfo.push("Male");
