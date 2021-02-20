@@ -588,8 +588,9 @@
 					];
 				table = $('#adverseEventsTable').DataTable({
 					data: [],
-					scrollY: tblHeight,
-					dom:"rtRSB",
+					//scrollY: tblHeight,
+					dom:"rtpRSB",
+					pageLength:20,
 					columns: columns,
 					columnDefs: [ {
 							"targets": [ 6,7,8 ],
@@ -620,8 +621,8 @@
 							}
 						}
 					],
-					deferRender: true,
-					scroller: true
+					deferRender: true
+					//scroller: true
 				});
 				$('#adverseEventsTable_wrapper').append('<div id="tableInfo" style="position:absolute; left:10px; bottom:8px; color:white; font-size:17px"></div>');
 				if(window.hasOwnProperty("responsiveInt") && window.responsiveInt != null) {
@@ -818,6 +819,9 @@
 			#searchIdeadTbl tr td {
 				color:white
 			}
+			.dataTables_wrapper .dataTables_paginate .paginate_button {
+				color: #fff !important;
+			}
 		</style>
 	</head>
 	<body>
@@ -915,7 +919,7 @@
 					</div>
 			</center>
 		</div>
-		<div id="mainStage" class="mainStage" style="display:none">
+		<div id="mainStage" class="mainStage" style="display:none; overflow-y:auto;">
 			<div id="searchFilters">
 				<center>
 					<div style="display:inline-block">
