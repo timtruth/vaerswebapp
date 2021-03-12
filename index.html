@@ -239,6 +239,9 @@
 					}
 					runSearch();
 				 });
+				 $(document).on("change", "#AEWithin", function() {
+					runSearch();
+				 });
 				/* $(document).on("click", ".dwnImg", function() {
 					var rowData = table.row($(this).closest("tr")).data();
 					var fSize = 26;
@@ -376,12 +379,16 @@
 				var searchPhrases = searchText.split(/AND|OR/) ;
 				var onlyShowDeaths = $('#onlyShowDeathsCheck').prop("checked");
 				var deathWithin = $('#deathWithin').val();
+				var AEWithin = $('#AEWithin').val();
 				var startVaxDate = $('#startVaxDate').val();
 				var endVaxDate = $('#endVaxDate').val();
 				var startDate = $('#startDate').val();
 				var endDate = $('#endDate').val();
 				if(deathWithin != "all") {
 					deathWithin = parseInt(deathWithin);
+				}
+				if(AEWithin != "all") {
+					AEWithin = parseInt(AEWithin);
 				}
 				var reactDateOpts = $('#reactDateOptsCheck').prop("checked");
 				var vaxDateOpts = $('#vaxDateOptsCheck').prop("checked");
@@ -429,6 +436,19 @@
 										include = false;
 									}
 								}
+							}
+						}
+						if(AEWithin == "all") {
+							if(rec[dataInds.date] == "") {
+								include = false;
+							}
+						} else {
+							var daysAfter = diffBetweenDates(rec[dataInds.vaxDate], rec[dataInds.date]);
+							//console.log(rec[dataInds.vaxDate] + " " + rec[dataInds.date] +  "   " + JSON.stringify(daysAfter) + "  <= " + deathWithin);
+							if(daysAfter === false) {
+								include = false;
+							} else if(daysAfter > 0 && daysAfter > AEWithin) {
+								include = false;
 							}
 						}
 						
@@ -822,6 +842,9 @@
 			.dataTables_wrapper .dataTables_paginate .paginate_button {
 				color: #fff !important;
 			}
+			#searchOpts label {
+				font-size:12px
+			}
 		</style>
 	</head>
 	<body>
@@ -882,37 +905,41 @@
 						<div onclick="startBrowse('deaths0Days')" class="bigBlueHomeBtn">Deaths On Vax Day</div>
 					</div>
 					<h2 style="margin-top:65px">Video Reports:</h2>
-					<div style="text-align:center">Powered By Odysee.com, a next generation video hosting site with much less censorship.  Sign up with this link and verify your account to earn 3 LBC coins: <a href="https://odysee.com/$/invite/@TimTruth:b" style="color: white !important;">https://odysee.com/$/invite/@TimTruth:b</a></div>
+					<div style="text-align:center">Videos hosted on Odysee.com, a next generation video hosting site with much less censorship.  Sign up with this link and verify your account to earn 3 LBC coins: <a href="https://odysee.com/$/invite/@TimTruth:b" style="color: white !important;">https://odysee.com/$/invite/@TimTruth:b</a></div>
 					<div style="margin-top:20px">
 						<center>
 							<div style="display:inline-block">
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Top35mostsuspiciousdeaths:5" target="_blank">
-									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/bf89811a9da9863a:2.jpg&height=360&width=640&quality=80" />
+									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/bf89811a9da9863a:2.jpg&height=360&width=640&quality=65" />
 									<div class="vidTitle">The 35 Most Suspicious Deaths From The VAERS Database: What's Going On Here?!</div>
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Deathswithin3daysofshot:3" target="_blank">
-									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/0174a7807a3f6c5a:8.jpg&height=360&width=640&quality=80" />
+									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/0174a7807a3f6c5a:8.jpg&height=360&width=640&quality=65" />
 									<div class="vidTitle">VAERS: Hundreds Die Within Days Of Controversial mRNA Shot?! You Sure It's Safe, FDA?</div>
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Diedwithinday:b" target="_blank">
-									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/2a5fb36db4498161:8.jpg&height=360&width=640&quality=80" />
+									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/2a5fb36db4498161:8.jpg&height=360&width=640&quality=65" />
 									<div class="vidTitle">VAERS Vax Exposé: 250+ Reports Of People Dying Within 1 Day Of The Covid19 Vaccine</div>
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Passingout-2-21-update:f" target="_blank">
-									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/a4a73014d6d4c99a:1.jpg&height=360&width=640&quality=80" />
+									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/a4a73014d6d4c99a:1.jpg&height=360&width=640&quality=65" />
 									<div class="vidTitle">UNCONTROLLABLE: Shaking, Passing Out &amp; Seizures After Vaccines [VAERS &amp; Yellow Card]</div>
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/37Miscarriagesinvaerstodate:c" target="_blank">
-									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/bd7e4c216e65ec96:3.jpg&height=360&width=640&quality=80" />
+									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/bd7e4c216e65ec96:3.jpg&height=360&width=640&quality=65" />
 									<div class="vidTitle">37 Reported Miscarriages In VAERS Vaccine Adverse Events System; Fauci & MSM: No Red Flags</div>
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/VaersNumbnessCovidVax:a" target="_blank">
-									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/e87f898efab1c90d:7.jpg&height=360&width=640&quality=80" />
+									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/e87f898efab1c90d:7.jpg&height=360&width=640&quality=65" />
 									<div class="vidTitle">500+ Reported Cases of Numbness, Paralysis, or Bell's Palsy After Covid Vacx; VAERS Data Walkthrough</div>
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Numbnessandparalysis:0" target="_blank">
-									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/0dc8cd2c74a23b59:0.jpg&height=360&width=640&quality=80" />
+									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/0dc8cd2c74a23b59:0.jpg&height=360&width=640&quality=65" />
 									<div class="vidTitle">Numbness, Paralysis & Bell's Palsy Seen Many Times Soon After Vax. What's Going On? HHS VAERS Data</div>
+								</a>
+								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Heartissues:0" target="_blank">
+									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/0d89618f3726448b:6.jpg&height=360&width=640&quality=65" />
+									<div class="vidTitle">Heart Issues Being Seen After The Controversial mRNA Therapy: Are They Related? You Decide!</div>
 								</a>
 								<div style="clear:both"></div>
 							</div>
@@ -979,12 +1006,26 @@
 								<div style="clear:both;"></div>
 							</div>
 						</div>
-						<div style="float:left; padding:3px">
+						<div id="searchOpts" style="float:left; padding:3px">
 							<div>
 								<input type="checkbox" id="vaxDateOptsCheck" /> <label for="vaxDateOptsCheck">Got Vaccine Between:</label> <input type="date" id="startVaxDate" disabled value="2020-12-01" /> and <input type="date" id="endVaxDate" disabled />
 							</div>
 							<div>
 								<input type="checkbox" id="reactDateOptsCheck" /> <label for="reactDateOptsCheck">AE Between:</label> <input type="date" id="startDate" disabled value="2020-12-01" /> and <input type="date" id="endDate" disabled />
+							</div>
+							<div>
+								<label for="filterAECheck">Days Before AE</label> <select id="AEWithin">
+									<option value="all" selected>Any Number of Days</option>
+									<option value="0">Same Day</option>
+									<option value="1">Within 1 Day</option>
+									<option value="2">Within 2 Days</option>
+									<option value="3">Within 3 Days</option>
+									<option value="4">Within 4 Days</option>
+									<option value="5">Within 5 Days</option>
+									<option value="7">Within 7 Days</option>
+									<option value="14">Within 14 Days</option>
+									<option value="30">Within 30 Days</option>
+								</select>
 							</div>
 							<div>
 								<input type="checkbox" id="onlyShowDeathsCheck" /> <label for="onlyShowDeathsCheck">Only Show Deaths</label> <select id="deathWithin">
