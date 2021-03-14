@@ -49,6 +49,9 @@
 			var table;
 			var searchIdea;
 			var tblHeightOffset = 180;
+			var downloadQueue = { empty:1 };
+			var curQItem;
+			var processingDwnlQ = false;
 			var dataInds = {
 				text: 0,
 				age: 1,
@@ -77,56 +80,21 @@
 					callback: function(key, options) {
 						var rowData = table.row($(this).closest("tr")[0]).data();
 						if(key == "dwnlImg") {
-							var fSize = 26;
-							if(rowData.t.length < 33) {
-								fSize = 125;
-							} else if(rowData.t.length < 106) {
-								fSize = 95;
-							} else if(rowData.t.length < 199) {
-								fSize = 84;
-							} else if(rowData.t.length < 394) {
-								fSize = 70;
-							} else if(rowData.t.length < 665) {
-								fSize = 61;
-							} else if(rowData.t.length < 935) {
-								fSize = 52;
-							} else if(rowData.t.length < 1374) {
-								fSize = 43;
-							} else if(rowData.t.length < 1812) {
-								fSize = 34;
-							} else if(rowData.t.length < 2609) {
-								fSize = 30;
-							} else if(rowData.t.length < 3406) {
-								fSize = 26;
+							downloadQueue[rowData.i] = {
+								t:rowData.t,
+								i:rowData.i,
+								dh:rowData.dh,
+								dR:rowData.dR,
+								s:rowData.s,
+								a:rowData.a,
+								vdR:rowData.vdR
+							};
+							if(downloadQueue) {
+								delete downloadQueue.empty;
 							}
-							$('#symptomText').html(rowData.t).css("font-size", fSize + "px");
-							var ptInfo = [];
-							if(rowData.s == "M") {
-								ptInfo.push("Male");
+							if(processingDwnlQ == false) {
+								startProcessingDwnQ();
 							}
-							if(rowData.s == "F") {
-								ptInfo.push("Female");
-							}
-							if(rowData.a != "" && rowData.a > 0) {
-								ptInfo.push(rowData.a + " years old");
-							}
-							$('#patientDetails').text(ptInfo.join(", "));
-							var reportDataLine = ["VAERS Report #" + rowData.i];
-							if(rowData.vd != '') {
-								reportDataLine.push("Vax Date: " + rowData.vdR);
-							}
-							
-							if(rowData.dh != '') {
-								reportDataLine.push(rowData.dh);
-							} else if(rowData.vd != '') {
-								reportDataLine.push("Onset Date: " + rowData.dR);
-							}
-							$('#reportDateLine').text(reportDataLine.join(", "));
-							html2canvas(document.getElementById("memeHolder")).then(function(canvas) {
-								canvas.toBlob(function(blob) {
-									saveAs(blob, "vaers-" + rowData.i + ".png"); 
-								});
-							});
 						}
 					},
 					items: {
@@ -306,6 +274,81 @@
 				}
 				$('#endDate, #endVaxDate').val(curDate.getFullYear() + '-' + mnth + '-' + dateStr)
 			});
+			function startProcessingDwnQ() {
+				 curQItem = false;
+				 for(var key in downloadQueue) {
+					if(downloadQueue.hasOwnProperty(key) && key != "empty") {
+						curQItem = downloadQueue[key];
+						if(numNonEmptyKeys(downloadQueue) == 1) {
+							downloadQueue.empty = 1;
+						}
+						delete downloadQueue[key];
+						break;
+					}
+				 }
+				var fSize = 26;
+				if(curQItem.t.length < 33) {
+					fSize = 125;
+				} else if(curQItem.t.length < 106) {
+					fSize = 95;
+				} else if(curQItem.t.length < 199) {
+					fSize = 84;
+				} else if(curQItem.t.length < 394) {
+					fSize = 70;
+				} else if(curQItem.t.length < 665) {
+					fSize = 61;
+				} else if(curQItem.t.length < 935) {
+					fSize = 52;
+				} else if(curQItem.t.length < 1374) {
+					fSize = 43;
+				} else if(curQItem.t.length < 1812) {
+					fSize = 34;
+				} else if(curQItem.t.length < 2609) {
+					fSize = 30;
+				} else if(curQItem.t.length < 3406) {
+					fSize = 26;
+				}
+				$('#symptomText').html(curQItem.t).css("font-size", fSize + "px");
+				var ptInfo = [];
+				if(curQItem.s == "M") {
+					ptInfo.push("Male");
+				}
+				if(curQItem.s == "F") {
+					ptInfo.push("Female");
+				}
+				if(curQItem.a != "" && curQItem.a > 0) {
+					ptInfo.push(curQItem.a + " years old");
+				}
+				$('#patientDetails').text(ptInfo.join(", "));
+				var reportDataLine = ["VAERS Report #" + curQItem.i];
+				if(curQItem.vd != '') {
+					reportDataLine.push("Vax Date: " + curQItem.vdR);
+				}
+				
+				if(curQItem.dh != '') {
+					reportDataLine.push(curQItem.dh);
+				} else if(curQItem.dR != '') {
+					reportDataLine.push("Onset Date: " + curQItem.dR);
+				}
+				$('#reportDateLine').text(reportDataLine.join(", "));
+				html2canvas(document.getElementById("memeHolder")).then(function(canvas) {
+					canvas.toBlob(function(blob) {
+						saveAs(blob, "vaers-" + curQItem.i + ".png"); 
+						if(!downloadQueue.hasOwnProperty("empty")) {
+							startProcessingDwnQ();
+						}
+					});
+				});
+			}
+			function numNonEmptyKeys(arr) {
+				var keys = 0;
+				for(var key in arr) {
+					if(arr.hasOwnProperty(key) && key != "empty") {
+						keys++;
+					}
+				}
+				return keys;
+			}
 			function switchToBrowse() {
 				$('#home').fadeOut(111);
 				window.setTimeout(function() {
