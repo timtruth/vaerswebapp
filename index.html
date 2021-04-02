@@ -43,7 +43,7 @@
 		
 		<script type="text/javascript">
 			var allData;
-			var dataFiles = ["allVaersRecordsPart1.txt", "allVaersRecordsPart2.txt", "allVaersRecordsPart3.txt"];
+			var dataFiles = ["allVaersRecords04-3-1.txt", "allVaersRecords04-3-2.txt"];
 			var dataFileLoadNum = 0;
 			var allDataTxt = '';
 			var table;
@@ -407,7 +407,8 @@
 				if(allData == null) {
 					switchToBrowse();
 					window.setTimeout(function() {
-						loadAllVaersData(browseAllData);
+						//loadAllVaersData(browseAllData);
+						loadVaersData(browseAllData);
 					}, 234);
 				} else {
 					switchToBrowse();
@@ -604,10 +605,17 @@
 					callback:callback
 				}).done(function(msg) {
 					dataFileLoadNum++;
-					allDataTxt += msg;
+					if(allData == null) {
+						allData = JSON.parse(msg);
+					} else {
+						var newData = JSON.parse(msg);
+						for(var i in newData) {
+							if(newData.hasOwnProperty(i) && i != "empty") {
+								allData[i] = newData[i];
+							}
+						}
+					}
 					if(dataFileLoadNum == dataFiles.length) {
-						allData = JSON.parse(allDataTxt);
-						allDataTxt = "";
 						if(this.hasOwnProperty("callback") && this.callback != null) {
 							this.callback();
 						}
