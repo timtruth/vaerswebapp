@@ -40,6 +40,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.7.1/jquery.ui.position.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		
 		<script type="text/javascript">
 			var allData;
@@ -50,7 +51,7 @@
 			var searchIdea;
 			var tblHeightOffset = 180;
 			var downloadQueue = { empty:1 };
-			var curQItem;
+			var curQItem, chartData;
 			var processingDwnlQ = false;
 			var dataInds = {
 				text: 0,
@@ -273,8 +274,82 @@
 				if(dateStr.length == 1) {
 					dateStr = "0" + dateStr;
 				}
-				$('#endDate, #endVaxDate').val(curDate.getFullYear() + '-' + mnth + '-' + dateStr)
+				$('#endDate, #endVaxDate').val(curDate.getFullYear() + '-' + mnth + '-' + dateStr);
+				$.ajax({
+					url:"chartData04-27.txt",
+					cache:true,
+					method:"GET"
+				}).done(function(msg) {
+					chartData = JSON.parse(msg);
+					renderCharts();
+				});
 			});
+			function renderCharts() {
+				var lbls = [];
+				for(var i = 0; i < chartData.deathDaysAfter.length; i++) {
+					lbls.push(i);
+				}
+				new Chart(document.getElementById('deathDaysDist'),  {
+				  type: 'bar',
+				  data:{
+						labels:lbls,
+						datasets: [{
+							label: 'Deaths x days after injection',
+							data: chartData.deathDaysAfter,
+							borderColor: "red",
+							backgroundColor: "red"
+						}]
+					},
+				  options: {
+					responsive: true,
+					scales: {
+					  y: {
+						beginAtZero: true
+					  },
+					  x: {
+						beginAtZero: true
+					  }
+					},
+					plugins: {
+						tooltip: {
+							callbacks: {
+								title: function(context) {
+									return (parseInt(context[0].label)-1) + " Days After Vax";
+								},
+								label: function(context) {
+									console.log(context.parsed);
+									return context.parsed.y + " died " + (parseInt(context.parsed.x)-1) + " days after shot";
+								}
+							}
+						}
+					}
+				  }
+				});
+				/*var lbls = [];
+				for(var i = 0; i < chartData.deathSympOnsetDaysAfter.length; i++) {
+					lbls.push(i);
+				}
+				new Chart(document.getElementById('deathOnsetDaysDist'),  {
+				  type: 'bar',
+				  data:{
+						labels:lbls,
+						datasets: [{
+							label: 'Deaths x days after injection',
+							data: chartData.deathSympOnsetDaysAfter,
+							borderColor: "red",
+							backgroundColor: "red"
+						}]
+					},
+				  options: {
+					responsive: true,
+					scales: {
+					  y: {
+						beginAtZero: true
+					  }
+					}
+				  }
+				});*/
+			}
 			function startProcessingDwnQ() {
 				 curQItem = false;
 				 for(var key in downloadQueue) {
@@ -1003,6 +1078,23 @@
 								</a>
 								<div style="clear:both"></div>
 							</div>
+						</center>
+					</div>
+					<div style="margin-top:65px">
+						<center>
+							<div style="display:inline-block">
+								<h2>Distribution of Days After Shot For Deaths:</h2>
+								<!-- width:780px; height:420px; max-width:96% -->
+								<div style="width:1000px; height:550px;">
+								  <canvas id="deathDaysDist"></canvas>
+								</div>
+							</div>
+							<!--<div style="display:inline-block">
+								<h2>For Deaths: Days Symptoms Onset After Shot:</h2>
+								<div style="width:500px; height:300px; max-width:96%">
+								  <canvas id="deathOnsetDaysDist"></canvas>
+								</div>
+							</div>-->
 						</center>
 					</div>
 					<h2 style="margin-top:65px">Anecdotal Adverse Events:</h2>
