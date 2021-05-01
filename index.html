@@ -314,11 +314,11 @@
 						tooltip: {
 							callbacks: {
 								title: function(context) {
-									return (parseInt(context[0].label)-1) + " Days After Vax";
+									return (parseInt(context[0].label)) + " Days After Vax";
 								},
 								label: function(context) {
 									console.log(context.parsed);
-									return context.parsed.y + " died " + (parseInt(context.parsed.x)-1) + " days after shot";
+									return context.parsed.y + " died " + (parseInt(context.parsed.x)) + " days after shot";
 								}
 							}
 						}
