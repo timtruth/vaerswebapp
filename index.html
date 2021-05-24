@@ -504,6 +504,7 @@
 				var endVaxDate = $('#endVaxDate').val();
 				var startDate = $('#startDate').val();
 				var endDate = $('#endDate').val();
+				window.resultIds = [];
 				if(deathWithin != "all") {
 					deathWithin = parseInt(deathWithin);
 				}
@@ -619,6 +620,7 @@
 							if(age == 0) {
 								age = "";
 							}
+							resultIds.push(vId);
 							results.push({
 								i:vId,
 								t:textStr,
