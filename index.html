@@ -54,6 +54,7 @@
 			var curQItem, chartData;
 			var processingDwnlQ = false;
 			var ignoreVaersIds = [];
+			var distMatchInfo = [];
 			var pLength = 20;
 			var dataInds = {
 				text: 0,
@@ -515,7 +516,7 @@
 				}
 				var reactDateOpts = $('#reactDateOptsCheck').prop("checked");
 				var vaxDateOpts = $('#vaxDateOptsCheck').prop("checked");
-				
+				distMatchInfo = [];
 				var results = [];
 				for(var vId in allData) {
 					if(allData.hasOwnProperty(vId)) {
@@ -623,19 +624,22 @@
 								age = "";
 							}
 							resultIds.push(vId);
+							var vd = rec[dataInds.vaxDate]);
+							var d = rec[dataInds.date];
 							results.push({
 								i:vId,
 								t:textStr,
 								a:age,
 								s:rec[dataInds.sex],
 								vdR:rec[dataInds.vaxDate],
-								vd:dtDateWrap(rec[dataInds.vaxDate]),
-								d:dtDateWrap(rec[dataInds.date]),
+								vd:dtDateWrap(vd),
+								d:dtDateWrap(d),
 								dR:rec[dataInds.date],
 								dh:deathStr,
 								lt:ltStr,
 								ed:edStr
 							});
+							distMatchInfo.push(vd, d);
 						}
 					}
 				}
