@@ -44,7 +44,7 @@
 		
 		<script type="text/javascript">
 			var allData;
-			var dataFiles = ["allVaersRecords05-22-1.txt", "allVaersRecords05-22-2.txt", "allVaersRecords05-22-3.txt", "allVaersRecords05-22-4.txt", "allVaersRecords05-22-5.txt", "allVaersRecords05-22-6.txt"];
+			var dataFiles = ["allVaersRecords04-31-1.txt", "allVaersRecords04-31-2.txt", "allVaersRecords04-31-3.txt"];
 			var dataFileLoadNum = 0;
 			var allDataTxt = '';
 			var table;
@@ -53,7 +53,6 @@
 			var downloadQueue = { empty:1 };
 			var curQItem, chartData;
 			var processingDwnlQ = false;
-			var ignoreVaersIds = [];
 			var dataInds = {
 				text: 0,
 				age: 1,
@@ -69,12 +68,12 @@
 			};
 			var searches = {
 				numbnessParalysis: 'numbness OR went numb OR felt numb OR totally numb OR lost sensation OR bell\'s OR bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy',
-				miscarriage: 'miscarriage OR stillbirth OR still birth OR stillborn OR still born OR Pregnancy loss',
-				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out',
+				miscarriage: 'miscarriage OR stillbirth OR still birth OR stillborn OR still born',
+				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out OR Pregnancy loss',
 				heartAttack: 'heart attack OR heart-attack OR cardiac arrest OR cardiac-arrest OR cardiac attack OR cardiac-attack OR heart arrest OR myocardial infarction OR heart failure OR heart-failure OR coronary thrombosis OR heart failure',
 				menstrual:"menstruation OR menstrual OR heavy period OR light period OR heavier period OR lighter period OR heavier than normal OR period for first OR Metrorrhagia OR spotting OR hypermenorrhea OR painful period OR dysmenorrhoea OR Dysmenorrhea OR period cramp OR early period OR period was early OR late period OR period was late OR missed period OR missed my period OR Irregular menses OR Amenorrhea OR menses"
 			};
-			searches.heartIssues = searches.heartAttack + " OR heart palpitation OR coronary OR cardiovascular disease OR heart defect OR cardiomyopathy";
+			searches.heartIssues = searches.heartAttack + " OR heart palpitation OR tachycardia OR coronary OR cardiovascular disease OR heart defects OR heart defect OR cardiomyopathy";
 			$(document).ready(function() {
 				//loadAllVaersData(browseAllData);
 				//loadVaersData(browseAllData);
@@ -277,7 +276,7 @@
 				}
 				$('#endDate, #endVaxDate').val(curDate.getFullYear() + '-' + mnth + '-' + dateStr);
 				$.ajax({
-					url:"chartData05-22.txt",
+					url:"chartData04-31.txt",
 					cache:true,
 					method:"GET"
 				}).done(function(msg) {
@@ -505,7 +504,6 @@
 				var endVaxDate = $('#endVaxDate').val();
 				var startDate = $('#startDate').val();
 				var endDate = $('#endDate').val();
-				window.resultIds = [];
 				if(deathWithin != "all") {
 					deathWithin = parseInt(deathWithin);
 				}
@@ -616,12 +614,11 @@
 						}
 						
 						//text: 0, age: 1, sex: 2, vaxDate: 3, date: 4, died: 5, hosp: 6, erEd: 7, lifeThreat: 8, disabled: 9, vaxManu: 10
-						if(include && ignoreVaersIds.indexOf(vId) == -1) {
+						if(include) {
 							var age = rec[dataInds.age];
 							if(age == 0) {
 								age = "";
 							}
-							resultIds.push(vId);
 							results.push({
 								i:vId,
 								t:textStr,
