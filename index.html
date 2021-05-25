@@ -796,14 +796,14 @@
 			
 			function getDistribution() {
 				window.distData = [];
-				var tblData = $.fn.dataTable.Api( '#adverseEventsTable' ).rows().data()
+				var tblData = $.fn.dataTable.Api( '#adverseEventsTable' ).rows().data();
 				for(var key in tblData) {
 					if(tblData.hasOwnProperty(key) && key != "empty") {
 						var r = tblData[key];
 						if(r.vd != "" && r.d != "") {
 							var ds = getDaysBetween(r.vd, r.d);
 							if(ds > 0) {
-								while(distData.length < (ds+1))) {
+								while(distData.length < (ds+1)) {
 									distData.push(0);
 								}
 								distData[ds]++;
