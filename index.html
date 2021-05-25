@@ -804,7 +804,7 @@
 				var cnt = 0;
 				for(var i = 0; i < distMatchInfo.length; i++) {
 					cnt++;
-					if(r.vd != "" && r.d != "") {
+					if(distMatchInfo[i][0] != "" && distMatchInfo[i][1] != "") {
 						var ds = getDaysBetween(distMatchInfo[i][0], distMatchInfo[i][1]);
 						if(ds >= 0 && ds < 165) {
 							while(distData.length < (ds+1)) {
