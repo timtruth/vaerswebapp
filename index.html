@@ -833,7 +833,7 @@
 				if(isNaN(date1) || isNaN(date2)) {
 					return -1;
 				}
-				return Math.round(date2.getTime() - date1.getTime() / (1000 * 3600 * 24));
+				return Math.round((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
 			}
 		</script>
 		<style type="text/css">
