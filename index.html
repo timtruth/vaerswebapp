@@ -802,7 +802,7 @@
 						var r = tblData[key];
 						if(r.vd != "" && r.d != "") {
 							var ds = getDaysBetween(r.vd, r.d);
-							if(ds > 0) {
+							if(ds > 0 && ds < 165) {
 								while(distData.length < (ds+1)) {
 									distData.push(0);
 								}
