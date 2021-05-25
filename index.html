@@ -813,7 +813,11 @@
 					}
 				}
 				console.log(distData);
-				console.log("copy(distData);");
+				window.distDataStr = "";
+				for(var i = 0; i < distData.length; i++) {
+					window.distDataStr += i + "\t" + distData + "\n";
+				}
+				console.log("copy(distDataStr);");
 			}
 			function getDaysBetween(d1, d2) {
 				var date1 = new Date(d1);
