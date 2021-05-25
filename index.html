@@ -798,8 +798,10 @@
 				window.distData = [];
 				var misses = 0;
 				var tblData = $.fn.dataTable.Api( '#adverseEventsTable' ).rows().data();
+				var cnt = 0;
 				for(var key in tblData) {
 					if(tblData.hasOwnProperty(key) && key != "empty") {
+						cnt++;
 						var r = tblData[key];
 						if(r.vd != "" && r.d != "") {
 							var ds = getDaysBetween(r.vd, r.d);
@@ -818,6 +820,7 @@
 						misses++;
 					}
 				}
+				console.log("cnt: " + cnt);
 				console.log(distData);
 				window.distDataStr = "";
 				for(var i = 0; i < distData.length; i++) {
