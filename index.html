@@ -639,7 +639,7 @@
 								lt:ltStr,
 								ed:edStr
 							});
-							distMatchInfo.push(vd, d);
+							distMatchInfo.push([vd, d]);
 						}
 					}
 				}
@@ -801,22 +801,16 @@
 			function getDistribution() {
 				window.distData = [];
 				var misses = 0;
-				var tblData = $.fn.dataTable.Api( '#adverseEventsTable' ).rows().data();
 				var cnt = 0;
-				for(var key in tblData) {
-					if(tblData.hasOwnProperty(key) && key != "empty") {
-						cnt++;
-						var r = tblData[key];
-						if(r.vd != "" && r.d != "") {
-							var ds = getDaysBetween(r.vd, r.d);
-							if(ds >= 0 && ds < 165) {
-								while(distData.length < (ds+1)) {
-									distData.push(0);
-								}
-								distData[ds]++;
-							} else {
-								misses++;
+				for(var i = 0; i < distMatchInfo.length; i++) {
+					cnt++;
+					if(r.vd != "" && r.d != "") {
+						var ds = getDaysBetween(distMatchInfo[i][0], distMatchInfo[i][1]);
+						if(ds >= 0 && ds < 165) {
+							while(distData.length < (ds+1)) {
+								distData.push(0);
 							}
+							distData[ds]++;
 						} else {
 							misses++;
 						}
