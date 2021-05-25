@@ -806,7 +806,6 @@
 					cnt++;
 					if(distMatchInfo[i][0] != "" && distMatchInfo[i][1] != "") {
 						var ds = getDaysBetween(distMatchInfo[i][0], distMatchInfo[i][1]);
-						console.log(distMatchInfo[i][0] + " -> " + distMatchInfo[i][1] + " " + ds);
 						if(ds >= 0 && ds < 165) {
 							while(distData.length < (ds+1)) {
 								distData.push(0);
@@ -827,6 +826,35 @@
 				}
 				console.log("copy(distDataStr);  " + misses);
 			}
+			function getDateDistribution() {
+				window.distData = [];
+				var startDate = '12/13/2021';
+				var misses = 0;
+				var cnt = 0;
+				for(var i = 0; i < distMatchInfo.length; i++) {
+					cnt++;
+					if(distMatchInfo[i][1] != "") {
+						var ds = getDaysBetween(startDate, distMatchInfo[i][1]);
+						if(ds >= 0 && ds < 165) {
+							while(distData.length < (ds+1)) {
+								distData.push(0);
+							}
+							distData[ds]++;
+						} else {
+							misses++;
+						}
+					} else {
+						misses++;
+					}
+				}
+				console.log("cnt: " + cnt);
+				console.log(distData);
+				window.distDataStr = "";
+				for(var i = 0; i < distData.length; i++) {
+					window.distDataStr += addDays(startDate, i) + "\t" + distData[i] + "\n";
+				}
+				console.log("copy(distDataStr);  " + misses);
+			}
 			function getDaysBetween(d1, d2) {
 				var date1 = new Date(d1);
 				var date2 = new Date(d2);
@@ -834,6 +862,15 @@
 					return -1;
 				}
 				return Math.round((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
+			}
+			
+			function addDays(d1, days) {
+				var date1 = new Date(d1);
+				if(isNaN(date1)) {
+					return -1;
+				}
+				var date2 = new Date(date1.getTime() + days*(1000 * 3600 * 24));
+				return (date2.getMonth()+1) + "/" + date2.getDate() + "/" + date2.getFullYear();
 			}
 		</script>
 		<style type="text/css">
