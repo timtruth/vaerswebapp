@@ -796,6 +796,7 @@
 			
 			function getDistribution() {
 				window.distData = [];
+				var misses = 0;
 				var tblData = $.fn.dataTable.Api( '#adverseEventsTable' ).rows().data();
 				for(var key in tblData) {
 					if(tblData.hasOwnProperty(key) && key != "empty") {
@@ -807,9 +808,12 @@
 									distData.push(0);
 								}
 								distData[ds]++;
+							} else {
+								misses++;
 							}
+						} else {
+							misses++;
 						}
-						
 					}
 				}
 				console.log(distData);
@@ -817,7 +821,7 @@
 				for(var i = 0; i < distData.length; i++) {
 					window.distDataStr += i + "\t" + distData[i] + "\n";
 				}
-				console.log("copy(distDataStr);");
+				console.log("copy(distDataStr);  " + misses);
 			}
 			function getDaysBetween(d1, d2) {
 				var date1 = new Date(d1);
