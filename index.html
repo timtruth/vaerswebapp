@@ -802,11 +802,11 @@
 						var r = tblData[key];
 						if(r.vd != "" && r.d != "") {
 							var ds = getDaysBetween(r.vd, r.d);
-							if(ds > 0 && ds < 165) {
+							if(ds >= 0 && ds < 165) {
 								while(distData.length < (ds+1)) {
 									distData.push(0);
 								}
-								distData[ds-1]++;
+								distData[ds]++;
 							}
 						}
 						
@@ -815,7 +815,7 @@
 				console.log(distData);
 				window.distDataStr = "";
 				for(var i = 0; i < distData.length; i++) {
-					window.distDataStr += i + "\t" + distData + "\n";
+					window.distDataStr += i + "\t" + distData[i] + "\n";
 				}
 				console.log("copy(distDataStr);");
 			}
