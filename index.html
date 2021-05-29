@@ -44,7 +44,7 @@
 		
 		<script type="text/javascript">
 			var allData;
-			var dataFiles = ["allVaersRecords05-22-1.txt", "allVaersRecords05-22-2.txt", "allVaersRecords05-22-3.txt", "allVaersRecords05-22-4.txt", "allVaersRecords05-22-5.txt", "allVaersRecords05-22-6.txt"];
+			var dataFiles = ["allVaersRecords05-29-1.txt", "allVaersRecords05-29-2.txt", "allVaersRecords05-29-3.txt", "allVaersRecords05-29-4.txt", "allVaersRecords05-29-5.txt", "allVaersRecords05-29-6.txt"];
 			var dataFileLoadNum = 0;
 			var allDataTxt = '';
 			var table;
@@ -279,7 +279,7 @@
 				}
 				$('#endDate, #endVaxDate').val(curDate.getFullYear() + '-' + mnth + '-' + dateStr);
 				$.ajax({
-					url:"chartData05-22.txt",
+					url:"chartData05-29.txt",
 					cache:true,
 					method:"GET"
 				}).done(function(msg) {
