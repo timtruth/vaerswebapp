@@ -73,9 +73,17 @@
 				numbnessParalysis: 'numbness OR went numb OR felt numb OR totally numb OR lost sensation OR bell\'s OR bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy',
 				miscarriage: 'miscarriage OR stillbirth OR still birth OR stillborn OR still born OR Pregnancy loss',
 				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out',
-				heartAttack: 'heart attack OR heart-attack OR cardiac arrest OR cardiac-arrest OR cardiac attack OR cardiac-attack OR heart arrest OR myocardial infarction OR heart failure OR heart-failure OR coronary thrombosis OR heart failure',
-				menstrual:"menstruation OR menstrual OR heavy period OR light period OR heavier period OR lighter period OR heavier than normal OR period for first OR Metrorrhagia OR spotting OR hypermenorrhea OR painful period OR dysmenorrhoea OR Dysmenorrhea OR period cramp OR early period OR period was early OR late period OR period was late OR missed period OR missed my period OR Irregular menses OR Amenorrhea OR menses"
+				heartAttack: 'heart attack OR heart-attack OR cardiac arrest OR cardiac-arrest OR cardiac attack OR cardiac-attack OR heart arrest OR myocardial infarction OR myocardial-infarction OR heart failure OR heart-failure OR coronary thrombosis OR heart failure OR +NSTEMI OR +STEMI',
+				menstrual:"menstruation OR menstrual OR heavy period OR light period OR heavier period OR lighter period OR heavier than normal OR period for first OR Metrorrhagia OR spotting OR hypermenorrhea OR painful period OR dysmenorrhoea OR Dysmenorrhea OR period cramp OR early period OR period was early OR late period OR period was late OR missed period OR missed my period OR Irregular menses OR Amenorrhea OR menses",
+				seizure:"seizure OR convulsion",
+				stroke:"stroke OR +CVA OR cerebrovascular accident",
+				shaking:"shaking OR twitch OR spasm OR convuls OR tremor",
+				passingOut:"fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR passed out",
+				numbness:"+numb OR +numbness OR lost sensation OR desensitized OR no sensation",
+				paralysis:"bell\'s OR bells palsy OR paralysis OR paralyzed OR palsy",
+				bloodClot:"+clot OR +clots OR +bloodclot OR +bloodclots OR artery OR vessel OR vasical OR embolism OR (clot != washcloth,cloth,wash cloth,wet cloth,wetcloth) OR arterio OR ceramide OR coagulum OR crassamentum OR embolus OR grume OR thrombus OR thrombo OR infarction"
 			};
+			//
 			searches.heartIssues = searches.heartAttack + " OR heart palpitation OR coronary OR cardiovascular disease OR heart defect OR cardiomyopathy";
 			$(document).ready(function() {
 				//loadAllVaersData(browseAllData);
@@ -202,7 +210,7 @@
 					 if(e.which ==13) {
 						runSearch();
 					 } else {
-						window.searchTimeout = window.setTimeout(runSearch, 500);
+						window.searchTimeout = window.setTimeout(runSearch, 1500);
 					 }
 					
 				 });
@@ -279,7 +287,7 @@
 				}
 				$('#endDate, #endVaxDate').val(curDate.getFullYear() + '-' + mnth + '-' + dateStr);
 				$.ajax({
-					url:"chartData05-29.txt",
+					url:"chartData05-22.txt",
 					cache:true,
 					method:"GET"
 				}).done(function(msg) {
@@ -482,6 +490,24 @@
 				} else if(startCmd == "heartAttack") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
 					$('#searchBox').val(searches.heartAttack);
+				} else if(startCmd == "seizure") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.seizure);
+				} else if(startCmd == "shaking") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.shaking);
+				} else if(startCmd == "passingOut") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.passingOut);
+				} else if(startCmd == "numbness") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.numbness);
+				} else if(startCmd == "paralysis") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.paralysis);
+				} else if(startCmd == "bloodClot") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.bloodClot);
 				}
 				if(allData == null) {
 					switchToBrowse();
@@ -524,16 +550,78 @@
 						var textStr = rec[dataInds.text];
 						var include = true;
 						var textLwr = rec[dataInds.text].toLowerCase();
-						if(searchPhrases.length == 1) {
-							if(textLwr.indexOf(searchPhrases[0].toLowerCase()) == -1 && (vId+"").indexOf(searchPhrases[0]) == -1) {
-								include = false;
-							}
-						} else if(searchPhrases.length > 1) {
+						if(searchText != "") {
 							var searchTextRepl = searchText;
 							for(var i = 0; i < searchPhrases.length; i++) {
 								var phrase = searchPhrases[i].trim();
-								var phraseFound = (((textLwr.indexOf(phrase.toLowerCase())) != -1) || (((vId+"").indexOf(phrase)) != -1));
-								searchTextRepl = searchTextRepl.replace(phrase, JSON.stringify(phraseFound));
+								var phraseOrig = phrase;
+								var phraseFound = false;
+								if(phrase.substring(0,1) == "+") {
+									phrase = phrase.substring(1);
+									var startSearchInd = 0;
+									while (startSearchInd != -1) {
+										if(startSearchInd >= 0) {
+											startSearchInd++;
+										}
+										startSearchInd = textLwr.indexOf(phrase.toLowerCase(), startSearchInd);
+										if(startSearchInd != -1) {
+											var startsWithSpace = (startSearchInd == 0);
+											var acptLetters = " .,!-";
+											if(!startsWithSpace) {
+												if(acptLetters.indexOf(textLwr.substring(startSearchInd-1, startSearchInd)) != -1) {
+													startsWithSpace = true;
+												}
+											}
+											var endsWithSpace = ((startSearchInd + phrase.length) == textLwr.length);
+											if(!endsWithSpace) {
+												if(acptLetters.indexOf(textLwr.substring(startSearchInd + phrase.length, startSearchInd + phrase.length+1)) != -1) {
+													endsWithSpace = true;
+												}
+											}
+											if(startsWithSpace == true && endsWithSpace == true) {
+												phraseFound = true;
+												break;
+											}
+										}
+									}
+								} else if(phrase.substring(0,1) == "(" && phrase.substring(phrase.length-1, phrase.length) == ")") {
+									var phraseParts = phrase.substring(1, phrase.length-2).split(" != ");
+									if(phraseParts.length == 2) {
+										phrase = phraseParts[0];
+										var startSearchInd = 0;
+										while (startSearchInd != -1) {
+											if(startSearchInd >= 0) {
+												startSearchInd++;
+											}
+											startSearchInd = textLwr.indexOf(phrase.toLowerCase(), startSearchInd);
+											if(startSearchInd != -1) {
+												var anySubMatches = false;
+												var sPhraseParts = phraseParts[1].split(",");
+												for(var j = 0; j < sPhraseParts.length; j++) {
+													var subphrase = sPhraseParts[j];
+													var offsetLets = subphrase.toLowerCase().indexOf(phrase.toLowerCase());
+													if(offsetLets >= 0) {
+														if(((startSearchInd-offsetLets) >= 0) && ((startSearchInd + subphrase.length) < textLwr.length)) {
+															var substr = textLwr.substring(startSearchInd-offsetLets, subphrase.length+(startSearchInd-offsetLets));
+															var subphraseFound = (substr == subphrase);
+															//console.log(substr + " vs " + subphrase + "[" + JSON.stringify(subphraseFound) + "]");
+															if(subphraseFound) {
+																anySubMatches = true;
+															}
+														}
+													}
+												}
+												if(anySubMatches == false) {
+													phraseFound = true;
+													break;
+												}
+											}
+										}
+									}
+								} else {
+									phraseFound = (((textLwr.indexOf(phrase.toLowerCase())) != -1) || (((vId+"").indexOf(phrase)) != -1));
+								}
+								searchTextRepl = searchTextRepl.replace(phraseOrig, JSON.stringify(phraseFound));
 								textStr = replaceAll(textStr, phrase, '<b>' + phrase + '</b>');
 							}
 							searchTextRepl = searchTextRepl.split("OR").join("||");
@@ -618,7 +706,7 @@
 						}
 						
 						//text: 0, age: 1, sex: 2, vaxDate: 3, date: 4, died: 5, hosp: 6, erEd: 7, lifeThreat: 8, disabled: 9, vaxManu: 10
-						if(include && ignoreVaersIds.indexOf(vId) == -1) {
+						if(include && ignoreVaersIds.indexOf(parseInt(vId)) == -1) {
 							var age = rec[dataInds.age];
 							if(age == 0) {
 								age = "";
@@ -1101,13 +1189,17 @@
 						<div onclick="startBrowse()" class="bigBlueHomeBtn" style="font-size: 36px;padding: 12px 31px;">All Data</div>
 					</div>
 					<div style="padding-top:30px">
-						<div onclick="startBrowse('lostControl')" class="bigBlueHomeBtn">Seizures, Shaking/ Passing Out</div>
-						<div onclick="startBrowse('numbnessParalysis')" class="bigBlueHomeBtn">Numbness/ Paralysis</div>
+						<div onclick="startBrowse('seizure')" class="bigBlueHomeBtn">Seizure</div>
+						<div onclick="startBrowse('shaking')" class="bigBlueHomeBtn">Shaking</div>
+						<div onclick="startBrowse('passingOut')" class="bigBlueHomeBtn">Passing Out</div>
+						<div onclick="startBrowse('numbness')" class="bigBlueHomeBtn">Numbness</div>
+						<div onclick="startBrowse('paralysis')" class="bigBlueHomeBtn">Paralysis</div>
 					</div>
 					<div style="padding-top:3px">
 						<div onclick="startBrowse('miscarriage')" class="bigBlueHomeBtn">Miscarriage</div>
 						<div onclick="startBrowse('heartIssues')" class="bigBlueHomeBtn">Heart Issues</div>
 						<div onclick="startBrowse('heartAttack')" class="bigBlueHomeBtn">Heart Attack</div>
+						<div onclick="startBrowse('bloodClot')" class="bigBlueHomeBtn">Blood Clots</div>
 					</div>
 					<div style="padding-top:3px">
 						<div onclick="startBrowse('deaths')" class="bigBlueHomeBtn">All Deaths</div>
