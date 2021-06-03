@@ -78,7 +78,7 @@
 				gbs:"+GBS OR guillain barre syndrome OR guillain-barre syndrome OR guillain barre OR guillain-barre OR +gb syndrome OR guillainbarr OR guillainbarr",
 				confusionMemory: 'memory loss OR forgetful OR dementia OR zone out OR zoned out OR confused',
 				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out',
-				heartAttack: 'heart attack OR heart-attack OR cardiac arrest OR cardiac-arrest OR cardiac attack OR cardiac-attack OR heart arrest OR myocardial infarction OR myocardial-infarction OR heart failure OR heart-failure OR coronary thrombosis OR heart failure OR +NSTEMI OR +STEMI OR Pulseless electrical activity OR +acute CHF OR +ACLS OR fibrillation arrest OR v fib arrest OR v-fib arrest OR vfib arrest OR +SCA OR cardiac death OR a fib arrest OR a-fib arrest OR afib arrest OR +I21.4 OR +asystole OR cardiopulmonary arrest OR +arrested OR +coded',
+				heartAttack: 'heart attack OR heart-attack OR cardiac arrest OR cardiac-arrest OR cardiac attack OR cardiac-attack OR heart arrest OR myocardial infarction OR myocardial-infarction OR heart failure OR heart-failure OR coronary thrombosis OR heart failure OR +NSTEMI OR +STEMI OR Pulseless electrical activity OR +acute CHF OR +ACLS OR fibrillation arrest OR v fib arrest OR v-fib arrest OR vfib arrest OR +SCA OR cardiac death OR a fib arrest OR a-fib arrest OR afib arrest OR +I21.4 OR +asystole OR cardiopulmonary arrest OR +arrested OR +coded OR +CHF',
 				menstrual:"menstruation OR menstrual OR heavy period OR light period OR heavier period OR lighter period OR heavier than normal OR period for first OR Metrorrhagia OR spotting OR hypermenorrhea OR painful period OR dysmenorrhoea OR Dysmenorrhea OR period cramp OR early period OR period was early OR late period OR period was late OR missed period OR missed my period OR Irregular menses OR Amenorrhea OR menses",
 				seizure:"seizure OR convulsion",
 				stroke:"stroke OR +CVA OR cerebrovascular accident",
@@ -586,7 +586,7 @@
 										startSearchInd = textLwr.indexOf(phrase.toLowerCase(), startSearchInd);
 										if(startSearchInd != -1) {
 											var startsWithSpace = (startSearchInd == 0);
-											var acptLetters = " .,!-()\"'";
+											var acptLetters = " .,!-()\"';";
 											if(!startsWithSpace) {
 												if(acptLetters.indexOf(textLwr.substring(startSearchInd-1, startSearchInd)) != -1) {
 													startsWithSpace = true;
@@ -1276,7 +1276,7 @@
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Handlersdeafear:e" target="_blank">
 									<img src="https://spee.ch/4/7dbdc9cfd50bf40e.jpg?height=360&width=640&quality=65" />
-									<div class="vidTitle">VAERS: Hundreds Of People Reporting Severe Hearing Loss &amp; Issues After Vax</div>
+									<div class="vidTitle">VAERS: Hundreds Of People Reporting Severe Hearing Loss &amp; And Other Hearing Issues After Vax</div>
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Menstrualchangesaftervaccine-1:4" target="_blank">
 									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/9ef832c8f3c0b69f:c.jpg&height=220&width=640&quality=65" />
