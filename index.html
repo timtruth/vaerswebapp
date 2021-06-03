@@ -74,6 +74,8 @@
 				miscarriage: 'miscarriage OR stillbirth OR still birth OR stillborn OR still born OR Pregnancy loss',
 				hearingIssues: 'went deaf OR +deaf OR +deafness OR hearing impair OR impaired hearing',
 				eyesightIssues: 'couldn\'t see OR vision impairment OR visual impairment OR vision issues OR eye couldn\'t see OR lost vision OR loss of vision',
+				anaphylaxis:"anaphylaxis OR anaphyla OR severe allergic reaction OR severe allergic response",
+				gbs:"+GBS OR guillain barre syndrome OR guillain-barre syndrome OR guillain barre OR guillain-barre OR +gb syndrome OR guillainbarr OR guillainbarr",
 				confusionMemory: 'memory loss OR forgetful OR dementia OR zone out OR zoned out OR confused',
 				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out',
 				heartAttack: 'heart attack OR heart-attack OR cardiac arrest OR cardiac-arrest OR cardiac attack OR cardiac-attack OR heart arrest OR myocardial infarction OR myocardial-infarction OR heart failure OR heart-failure OR coronary thrombosis OR heart failure OR +NSTEMI OR +STEMI OR Pulseless electrical activity OR +acute CHF OR +ACLS OR fibrillation arrest OR v fib arrest OR v-fib arrest OR vfib arrest OR +SCA OR cardiac death OR a fib arrest OR a-fib arrest OR afib arrest OR +I21.4 OR +asystole OR cardiopulmonary arrest OR +arrested OR +coded',
@@ -520,6 +522,12 @@
 				} else if(startCmd == "confusionMemory") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
 					$('#searchBox').val(searches.confusionMemory);
+				} else if(startCmd == "gbs") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.gbs);
+				} else if(startCmd == "anaphylaxis") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.anaphylaxis);
 				}
 				if(allData == null) {
 					switchToBrowse();
@@ -1212,11 +1220,13 @@
 						<div onclick="startBrowse('heartIssues')" class="bigBlueHomeBtn">Heart Issues</div>
 						<div onclick="startBrowse('heartAttack')" class="bigBlueHomeBtn">Heart Attack</div>
 						<div onclick="startBrowse('bloodClot')" class="bigBlueHomeBtn">Blood Clots</div>
+						<div onclick="startBrowse('anaphylaxis')" class="bigBlueHomeBtn">Anaphylaxis</div>
 					</div>
 					<div style="padding-top:3px">
 						<div onclick="startBrowse('hearingIssues')" class="bigBlueHomeBtn">Hearing Issues</div>
 						<div onclick="startBrowse('eyesightIssues')" class="bigBlueHomeBtn">Eyesight Issues</div>
 						<div onclick="startBrowse('confusionMemory')" class="bigBlueHomeBtn">Confusion/ Memory</div>
+						<div onclick="startBrowse('gbs')" class="bigBlueHomeBtn">Guillain-Barré</div>
 					</div>
 					<div style="padding-top:3px">
 						<div onclick="startBrowse('deaths')" class="bigBlueHomeBtn">All Deaths</div>
