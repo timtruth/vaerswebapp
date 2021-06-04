@@ -76,7 +76,7 @@
 				hearingIssues: 'went deaf OR +deaf OR +deafness OR hearing impair OR impaired hearing',
 				eyesightIssues: 'couldn\'t see OR vision impairment OR visual impairment OR vision issues OR eye couldn\'t see OR lost vision OR loss of vision OR blind OR went blind OR blindness',
 				anaphylaxis:"anaphylaxis OR anaphyla OR severe allergic reaction OR severe allergic response",
-				gbs:"+GBS OR guillain barre syndrome OR guillain-barre syndrome OR guillain barre OR guillain-barre OR +gb syndrome OR guillainbarr OR guillainbarr",
+				gbs:"+GBS OR guillain barre syndrome OR guillain-barre syndrome OR guillain barre OR guillain-barre OR +gb syndrome OR guillainbarr OR guillainbarr OR Gillian Barre",
 				confusionMemory: 'memory loss OR forgetful OR dementia OR zone out OR zoned out OR confused',
 				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out',
 				heartAttack: 'heart attack OR heart-attack OR cardiac arrest OR cardiac-arrest OR cardiac attack OR cardiac-attack OR heart arrest OR myocardial infarction OR myocardial-infarction OR heart failure OR heart-failure OR coronary thrombosis OR heart failure OR +NSTEMI OR +STEMI OR Pulseless electrical activity OR +acute CHF OR +ACLS OR fibrillation arrest OR v fib arrest OR v-fib arrest OR vfib arrest OR +SCA OR cardiac death OR a fib arrest OR a-fib arrest OR afib arrest OR +I21.4 OR +asystole OR cardiopulmonary arrest OR +arrested OR +coded OR +CHF',
@@ -842,7 +842,7 @@
 				var cnt = 1;
 				for(var key in searches) {
 					if(searches.hasOwnProperty(key) && skipSearchOpts.indexOf(key) == -1) {
-						respTxt += cnt + ") \t"  + key + ":" + searches[key] + "\n";
+						respTxt += cnt + ") \t"  + key + ": " + searches[key] + "\n";
 						cnt++
 					}
 				}
