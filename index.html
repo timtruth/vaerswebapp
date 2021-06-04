@@ -55,6 +55,7 @@
 			var processingDwnlQ = false;
 			var ignoreVaersIds = [];
 			var distMatchInfo = [];
+			var skipSearchOpts = ["numbnessParalysis", "lostControl", "heartIssues"];
 			var pLength = 20;
 			var dataInds = {
 				text: 0,
@@ -70,7 +71,7 @@
 				vaxManu: 10
 			};
 			var searches = {
-				numbnessParalysis: 'numbness OR went numb OR felt numb OR totally numb OR lost sensation OR bell\'s OR bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy',
+				numbnessParalysis: 'numbness OR went numb OR felt numb OR totally numb OR lost sensation OR bell\'s OR bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy OR +numb',
 				miscarriage: 'miscarriage OR stillbirth OR still birth OR stillborn OR still born OR Pregnancy loss',
 				hearingIssues: 'went deaf OR +deaf OR +deafness OR hearing impair OR impaired hearing',
 				eyesightIssues: 'couldn\'t see OR vision impairment OR visual impairment OR vision issues OR eye couldn\'t see OR lost vision OR loss of vision',
@@ -834,6 +835,18 @@
 						this.callback();
 					}
 				});
+			}
+			
+			function copyCategoryKeywords() {
+				window.respTxt = "";
+				var cnt = 1;
+				for(var key in searches) {
+					if(searches.hasOwnProperty(key) && skipSearchOpts.indexOf(key) == -1) {
+						respTxt += cnt + ") \t"  + key + ":" + searches[key] + "\n";
+						cnt++
+					}
+				}
+				console.log("copy(respTxt)");
 			}
 			
 			function browseAllData() {
