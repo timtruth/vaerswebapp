@@ -562,6 +562,9 @@
 				} else if(startCmd == "heartInflammation") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
 					$('#searchBox').val(searches.heartInflammation);
+				} else if(startCmd == "carCrash") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
+					$('#searchBox').val(searches.carCrash);
 				}
 				if(allData == null) {
 					switchToBrowse();
@@ -1267,15 +1270,12 @@
 						<div onclick="startBrowse('passingOut')" class="bigBlueHomeBtn">Passing Out</div>
 						<div onclick="startBrowse('numbness')" class="bigBlueHomeBtn">Numbness</div>
 						<div onclick="startBrowse('paralysis')" class="bigBlueHomeBtn">Paralysis</div>
-					</div>
-					<div style="padding-top:3px">
 						<div onclick="startBrowse('miscarriage')" class="bigBlueHomeBtn">Miscarriage</div>
 						<div onclick="startBrowse('heartIssues')" class="bigBlueHomeBtn">Heart Issues</div>
 						<div onclick="startBrowse('heartAttack')" class="bigBlueHomeBtn">Heart Attack</div>
 						<div onclick="startBrowse('bloodClot')" class="bigBlueHomeBtn">Blood Clots</div>
+						<div onclick="startBrowse('carCrash')" class="bigBlueHomeBtn">Blood Clots</div>
 						<div onclick="startBrowse('anaphylaxis')" class="bigBlueHomeBtn">Anaphylaxis</div>
-					</div>
-					<div style="padding-top:3px">
 						<div onclick="startBrowse('hearingIssues')" class="bigBlueHomeBtn">Hearing Issues</div>
 						<div onclick="startBrowse('eyesightIssues')" class="bigBlueHomeBtn">Eyesight Issues</div>
 						<div onclick="startBrowse('confusionMemory')" class="bigBlueHomeBtn">Confusion/ Memory</div>
