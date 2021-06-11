@@ -779,7 +779,7 @@
 									//console.log(rec[dataInds.vaxDate] + " " + rec[dataInds.died] +  "   " + JSON.stringify(daysAfter) + "  <= " + deathWithin);
 									if(daysAfter === false) {
 										include = false;
-									} else if(daysAfter > 0 && daysAfter > deathWithin) {
+									} else if(daysAfter >= 0 && daysAfter > deathWithin) {
 										include = false;
 									}
 								}
