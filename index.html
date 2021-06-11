@@ -79,8 +79,8 @@
 			var searches = {
 				numbnessParalysis: "numbness OR went numb OR felt numb OR totally numb OR lost sensation OR +bell's OR +bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy OR +numb",
 				miscarriage: 'miscarried OR miscarriage OR stillbirth OR still birth OR stillborn OR still born OR Pregnancy loss OR spontaneous abortion',
-				hearingIssues: 'went deaf OR +deaf OR +deafness OR hearing impair OR impaired hearing OR could not hear OR couldn\'t hear OR unable to hear',
-				eyesightIssues: "visual field defect OR +couldn't see OR vision impairment OR visual impairment OR vision issues OR eye +couldn't see OR lost vision OR loss of vision OR blind OR went blind OR blindness OR lost of vision OR unable to see OR blackening OR went black",
+				hearingIssues: 'went deaf OR +deaf OR +deafness OR hearing impair OR impaired hearing OR could not hear OR couldn\'t hear OR unable to hear OR lost hearing',
+				eyesightIssues: "visual field defect OR +couldn't see OR vision impairment OR visual impairment OR vision issues OR lost vision OR loss of vision OR blind OR went blind OR blindness OR lost of vision OR +unable to see OR blackening OR went black OR lost eye sight OR +lost sight OR +no sight",
 				tunnelVision: "tunnel vision",
 				blurryVision: "blurry vision",
 				anaphylaxis:"anaphylaxis OR anaphyla OR severe allergic reaction OR severe allergic response OR swelling of the tongue OR tounge swelling OR throat closing OR throat closed",
@@ -312,18 +312,16 @@
 					chartData = JSON.parse(msg);
 					renderCharts();
 				});
-				/*$.ajax({
+				/**$.ajax({
 					url:"DailyTotalsWeekly.txt",
 					cache:true,
 					method:"GET"
 				}).done(function(msg) {
 					weeklyDailyData = JSON.parse(msg);
 					window.setInterval(function() {
-						var dt = new Date(new Date('2021-01-15').getTime() + 86400000*7*blogChartInd);
-						$("#vaersDropDate").text((dt.getMonth()+1) + "/" + dt.getDate() + "/" + dt.getFullYear() + " (" + blogChartInd + ")");
-						renderBacklogChart();
-						blogChartInd = (blogChartInd+1)%weeklyDailyData.length;
+						progressBacklogCharts();
 					}, 1750);
+					progressBacklogCharts();
 				});*/
 				var radioOpts = '';
 				if(location.href.indexOf("?narrator") != -1) {
@@ -349,12 +347,18 @@
 				}
 				
 			});
+			function progressBacklogCharts() {
+				var dt = new Date(new Date('2021-01-15').getTime() + 86400000*7*blogChartInd+500);
+				$("#vaersDropDate").text((dt.getUTCMonth()+1) + "/" + dt.getUTCDate() + "/" + dt.getUTCFullYear() + " (" + blogChartInd + ")");
+				renderBacklogChart();
+				blogChartInd = (blogChartInd+1)%weeklyDailyData.length;
+			}
 			function renderBacklogChart() {
 				var dataRay = weeklyDailyData[blogChartInd];
 				var lbls = [];
 				var dateIncIt = new Date(new Date(backlogFirstDate).getTime());
 				for(var i = 0; i < dataRay.length; i++) {
-					var dateStr = (dateIncIt.getMonth()+1) + "/" + dateIncIt.getDate() + "/" + dateIncIt.getFullYear();
+					var dateStr = (dateIncIt.getUTCMonth()+1) + "/" + dateIncIt.getUTCDate() + "/" + dateIncIt.getUTCFullYear();
 					lbls.push(dateStr);
 					dateIncIt = new Date(new Date(dateIncIt).getTime() + 86400000);
 				}
@@ -1429,7 +1433,7 @@
 								<div style="width:750px; height:375px;">
 								  <canvas id="deathDaysDist"></canvas>
 								</div>
-								<!--<h2>Backlog Tracking Animated: <select style="display:none" id="backlogGroupBySel"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></h2>
+								<!-- <h2>Backlog Tracking Animated: <select style="display:none" id="backlogGroupBySel"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></h2>
 								<div>
 									VAERS Datadrop on <div id="vaersDropDate"></div>
 								</div>
