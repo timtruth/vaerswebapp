@@ -80,9 +80,10 @@
 				numbnessParalysis: "numbness OR went numb OR felt numb OR totally numb OR lost sensation OR +bell's OR +bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy OR +numb",
 				miscarriage: 'miscarried OR miscarriage OR stillbirth OR still birth OR stillborn OR still born OR Pregnancy loss OR spontaneous abortion',
 				hearingIssues: 'went deaf OR +deaf OR +deafness OR hearing impair OR impaired hearing OR could not hear OR couldn\'t hear OR unable to hear OR lost hearing',
-				eyesightIssues: "visual field defect OR +couldn't see OR vision impairment OR visual impairment OR vision issues OR lost vision OR loss of vision OR blind OR went blind OR blindness OR lost of vision OR +unable to see OR blackening OR went black OR lost eye sight OR +lost sight OR +no sight OR +trouble seeing OR +trouble with eyesight OR +trouble with sight OR loss of sight OR eyesight issue",
+				eyesightLoss: "visual field defect OR +couldn't see OR vision impairment OR visual impairment OR vision issues OR lost vision OR loss of vision OR blind OR went blind OR blindness OR lost of vision OR +unable to see OR blackening OR went black OR lost eye sight OR +lost sight OR +no sight OR +trouble seeing OR +trouble with eyesight OR +trouble with sight OR loss of sight OR eyesight issue OR +decreased vision",
 				tunnelVision: "tunnel vision",
 				blurryVision: "blurry vision",
+				doubleVision: "double vision",
 				anaphylaxis:"anaphylaxis OR anaphyla OR severe allergic reaction OR severe allergic response OR swelling of the tongue OR tounge swelling OR throat closing OR throat closed",
 				gbs:"+GBS OR guillain barre syndrome OR guillain-barre syndrome OR guillain barre OR guillain-barre OR +gb syndrome OR guillainbarr OR guillainbarr OR Gillian Barre OR guillian barre",
 				confusionMemory: 'memory loss OR forgetful OR dementia OR zone out OR zoned out OR confused OR unable to focus OR focus issue OR trouble focusing OR hard to focus OR Altered Mental Status',
@@ -629,9 +630,9 @@
 				} else if(startCmd == "hearingIssues") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
 					$('#searchBox').val(searches.hearingIssues);
-				} else if(startCmd == "eyesightIssues") {
+				} else if(startCmd == "eyesightLoss") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
-					$('#searchBox').val(searches.eyesightIssues);
+					$('#searchBox').val(searches.eyesightLoss);
 				} else if(startCmd == "confusionMemory") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
 					$('#searchBox').val(searches.confusionMemory);
@@ -1363,7 +1364,7 @@
 						<div onclick="startBrowse('carCrash')" class="bigBlueHomeBtn">Car Crash</div>
 						<div onclick="startBrowse('anaphylaxis')" class="bigBlueHomeBtn">Anaphylaxis</div>
 						<div onclick="startBrowse('hearingIssues')" class="bigBlueHomeBtn">Hearing Issues</div>
-						<div onclick="startBrowse('eyesightIssues')" class="bigBlueHomeBtn">Eyesight Issues</div>
+						<div onclick="startBrowse('eyesightLoss')" class="bigBlueHomeBtn">Eyesight Issues</div>
 						<div onclick="startBrowse('confusionMemory')" class="bigBlueHomeBtn">Confusion/ Memory</div>
 						<div onclick="startBrowse('gbs')" class="bigBlueHomeBtn">Guillain-Barré</div>
 					</div>
@@ -1404,6 +1405,10 @@
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Numbnessandparalysis:0" target="_blank">
 									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/0dc8cd2c74a23b59:0.jpg&height=360&width=640&quality=65" />
 									<div class="vidTitle">Numbness, Paralysis &amp; Bell's Palsy Seen Many Times Soon After Vax. What's Going On? HHS VAERS Data</div>
+								</a>
+								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Heartattackcardiacarrest:c" target="_blank">
+									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/7b2d2ed5ec9732c8:2.jpg&height=360&width=640&quality=65" />
+									<div class="vidTitle">Heart Inflammation: Almost a Thousand Cases of Carditis &amp; Pericarditis In HHS VAERS Data</div>
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Heartattackcardiacarrest:c" target="_blank">
 									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/e1cbd63fc5d4a31e:2.jpg&height=360&width=640&quality=65" />
