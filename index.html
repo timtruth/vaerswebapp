@@ -85,8 +85,8 @@
 				blurryVision: "blurry vision",
 				doubleVision: "double vision",
 				anaphylaxis:"anaphylaxis OR anaphyla OR severe allergic reaction OR severe allergic response OR swelling of the tongue OR tounge swelling OR throat closing OR throat closed",
-				gbs:"+GBS OR guillain barre syndrome OR guillain-barre syndrome OR guillain barre OR guillain-barre OR +gb syndrome OR guillainbarr OR guillainbarr OR Gillian Barre OR guillian barre",
-				confusionMemory: 'memory loss OR forgetful OR dementia OR zone out OR zoned out OR confused OR unable to focus OR focus issue OR trouble focusing OR hard to focus OR Altered Mental Status',
+				gbs:"+GBS OR guillain barre syndrome OR guillain-barre syndrome OR guillain barre OR guillain-barre OR +gb syndrome OR guillainbarr OR guillainbarr OR memory problem OR Gillian Barre OR guillian barre",
+				confusionMemory: 'memory loss OR memory trouble OR memory issue OR lack of concentration OR forgetful OR dementia OR delirium OR zone out OR zoned out OR confused OR confusion OR unable to focus OR focus issue OR trouble focusing OR hard to focus OR Altered Mental Status OR memory became cloudy OR cognitive dysfunction OR hard to think OR lapse in memory OR disorientation OR unable to remember OR inability to think OR inability to remember OR foggy memory OR memory is impaired OR memory is significantly impaired OR memory impairment OR cognitive impairment OR memory lapse OR trouble remembering OR +couldn\'t remember OR +can\'t remember OR +can\'t think',
 				lostControl: 'shaking OR twitch OR seizure OR spasm OR convuls OR tremor OR fainted OR syncope OR loss of consciousness OR lost consciousness OR fell over OR balance issues OR lost balance OR passed out',
 				heartAttack: 'heart attack OR heart-attack OR cardiac arrest OR cardiac-arrest OR cardiac attack OR cardiac-attack OR heart arrest OR myocardial infarction OR myocardial-infarction OR heart failure OR heart-failure OR coronary thrombosis OR heart failure OR +NSTEMI OR +STEMI OR Pulseless electrical activity OR +acute CHF OR +ACLS OR fibrillation arrest OR v fib arrest OR v-fib arrest OR vfib arrest OR +SCA OR cardiac death OR a fib arrest OR a-fib arrest OR afib arrest OR +I21.4 OR +asystole OR cardiopulmonary arrest OR +arrested OR +coded OR +CHF OR +SCD OR +asystolic',
 				menstrual:"menstruation OR menstrual OR heavy period OR light period OR heavier period OR lighter period OR heavier than normal OR period for first OR Metrorrhagia OR spotting OR hypermenorrhea OR painful period OR dysmenorrhoea OR Dysmenorrhea OR period cramp OR early period OR period was early OR late period OR period was late OR missed period OR missed my period OR Irregular menses OR Amenorrhea OR menses OR menstural",
@@ -313,7 +313,7 @@
 					chartData = JSON.parse(msg);
 					renderCharts();
 				});
-				/**$.ajax({
+				/*$.ajax({
 					url:"DailyTotalsWeekly.txt",
 					cache:true,
 					method:"GET"
@@ -1438,13 +1438,13 @@
 								<div style="width:750px; height:375px;">
 								  <canvas id="deathDaysDist"></canvas>
 								</div>
-								<!-- <h2>Backlog Tracking Animated: <select style="display:none" id="backlogGroupBySel"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></h2>
+								<!--<h2>Backlog Tracking Animated: <select style="display:none" id="backlogGroupBySel"><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option></select></h2>
 								<div>
 									VAERS Datadrop on <div id="vaersDropDate"></div>
 								</div>
 								<div style="width:750px; height:375px;">
 								  <canvas id="backlogChart"></canvas>
-								</div> -->
+								</div>-->
 							</div>
 							<!--<div style="display:inline-block">
 								<h2>For Deaths: Days Symptoms Onset After Shot:</h2>
