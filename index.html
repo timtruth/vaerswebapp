@@ -341,6 +341,9 @@
 							var cmd = $('input[name=voiceoverOpt]:checked').val();
 							ignoreVaersIds = excludes[cmd];
 							startBrowse(cmd);
+							window.setTimeout(function() {
+								$('#showColumnCheckDeath:not(:checked)').click()
+							}, 777);
 						}
 					});
 					$('.swal-text').html(radioOpts);
