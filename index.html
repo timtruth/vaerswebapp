@@ -44,7 +44,7 @@
 		
 		<script type="text/javascript">
 			var allData;
-			var dataFiles = ["allVaersRecords06-12-1.txt", "allVaersRecords06-12-2.txt", "allVaersRecords06-12-3.txt", "allVaersRecords06-12-4.txt", "allVaersRecords06-12-5.txt", "allVaersRecords06-12-6.txt", "allVaersRecords06-12-7.txt", "allVaersRecords06-12-8.txt"];
+			var dataFiles = ["allVaersRecords06-19-1.txt", "allVaersRecords06-19-2.txt", "allVaersRecords06-19-3.txt", "allVaersRecords06-19-4.txt", "allVaersRecords06-19-5.txt", "allVaersRecords06-19-6.txt", "allVaersRecords06-19-7.txt", "allVaersRecords06-19-8.txt"];
 			var dataFileLoadNum = 0;
 			var allDataTxt = '';
 			var table;
@@ -79,7 +79,7 @@
 			var includes = {carCrash:[904998, 909542, 913527, 913853, 952803, 1016705, 1051013, 1102605, 1166894, 1186078, 1192309, 1210615, 1290729, 906725, 925755, 987413, 1029395, 1053106, 1144762, 1148705, 1193778, 1270010, 1279118, 1306201, 1370352]};
 			var searches = {
 				numbnessParalysis: "numbness OR went numb OR felt numb OR totally numb OR lost sensation OR +bell's OR +bells palsy OR paralysis OR desensitized OR no sensation OR bells palsy OR +numb",
-				miscarriage: 'miscarried OR miscarriage OR stillbirth OR still birth OR stillborn OR still born OR Pregnancy loss OR spontaneous abortion',
+				miscarriage: 'Missed AB OR missed abortion OR miscarried OR miscarriage OR stillbirth OR still birth OR stillborn OR still born OR Pregnancy loss OR spontaneous abortion OR fetal death OR fetal demise OR could not find a heart beat OR couldn\'t find heartbeart OR heart stopped on pregnancy OR Pregnancy not viable OR embryonic demise OR +SAB OR staphylococcal bacteremia',
 				hearingIssues: 'went deaf OR +deaf OR +deafness OR hearing impair OR impaired hearing OR could not hear OR couldn\'t hear OR unable to hear OR lost hearing',
 				eyesightLoss: "visual field defect OR +couldn't see OR vision impairment OR visual impairment OR vision issues OR lost vision OR loss of vision OR blind OR went blind OR blindness OR lost of vision OR +unable to see OR blackening OR went black OR lost eye sight OR +lost sight OR +no sight OR +trouble seeing OR +trouble with eyesight OR +trouble with sight OR loss of sight OR eyesight issue OR +decreased vision",
 				tunnelVision: "tunnel vision",
@@ -307,7 +307,7 @@
 				}
 				$('#endDate, #endVaxDate').val(curDate.getFullYear() + '-' + mnth + '-' + dateStr);
 				$.ajax({
-					url:"chartData06-12.txt",
+					url:"chartData06-19.txt",
 					cache:true,
 					method:"GET"
 				}).done(function(msg) {
@@ -326,6 +326,7 @@
 					progressBacklogCharts();
 				});*/
 				var radioOpts = '';
+				radioOpts += '<input type="radio" name="voiceoverOpt" id="voiceoverOptdeaths1Days" value="deaths1Days" /> <label for="voiceoverOptdeaths1Days" style="color:white">deaths1Days</label>';
 				if(location.href.indexOf("?narrator") != -1) {
 					for(var key in searches) {
 						if(searches.hasOwnProperty(key) && excludes.hasOwnProperty(key)) {
@@ -596,6 +597,10 @@
 				} else if(startCmd == "deaths0Days") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
 					$('#deathWithin').val("0");
+					$('#searchBox').val('');
+				} else if(startCmd == "deaths1Days") {
+					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", true);
+					$('#deathWithin').val("1");
 					$('#searchBox').val('');
 				} else if(startCmd == "lostControl") {
 					$('#onlyShowDeathsCheck, #showColumnCheckDeath').prop("checked", false);
@@ -1362,7 +1367,7 @@
 			<center>
 					<h1 style="margin-top:35px; font-size:39px">Browse Data:</h1>
 					<div style="padding-top:3px">
-						<div onclick="startBrowse()" class="bigBlueHomeBtn" style="font-size: 36px;padding: 12px 31px;">All Data</div>
+						<div onclick="startBrowse()" class="bigBlueHomeBtn" style="font-size: 34px;padding: 8px 23px;background: #008200;">All Data</div>
 					</div>
 					<div style="padding-top:30px">
 						<div onclick="startBrowse('seizure')" class="bigBlueHomeBtn">Seizure</div>
@@ -1383,9 +1388,9 @@
 						<div onclick="startBrowse('gbs')" class="bigBlueHomeBtn">Guillain-Barré</div>
 					</div>
 					<div style="padding-top:3px">
-						<div onclick="startBrowse('deaths')" class="bigBlueHomeBtn">All Deaths</div>
-						<div onclick="startBrowse('deaths1Week')" class="bigBlueHomeBtn">Deaths Within 1 Week</div>
-						<div onclick="startBrowse('deaths0Days')" class="bigBlueHomeBtn">Deaths On Vax Day</div>
+						<div onclick="startBrowse('deaths')" class="bigBlueHomeBtn" style="background: #b90000;">All Deaths</div>
+						<div onclick="startBrowse('deaths1Week')" class="bigBlueHomeBtn" style="background: #b90000;">Deaths Within 1 Week</div>
+						<div onclick="startBrowse('deaths1Days')" class="bigBlueHomeBtn" style="background: #b90000;">Deaths Within 1 Day</div>
 					</div>
 					<h2 style="margin-top:65px">Video Reports:</h2>
 					<div style="text-align:center">Videos hosted on Odysee.com, a next generation video hosting site with much less censorship.  Sign up with this link and verify your account to earn 3 LBC coins: <a href="https://odysee.com/$/invite/@TimTruth:b" style="color: white !important;">https://odysee.com/$/invite/@TimTruth:b</a></div>
@@ -1408,9 +1413,9 @@
 									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/a4a73014d6d4c99a:1.jpg&height=360&width=640&quality=65" />
 									<div class="vidTitle">UNCONTROLLABLE: Shaking, Passing Out &amp; Seizures After Vaccines [VAERS &amp; Yellow Card]</div>
 								</a>
-								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Miscarriagesupdate313:9" target="_blank">
-									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/2813a9a171e02c5d:6.jpg&height=360&width=640&quality=65" />
-									<div class="vidTitle">70+ Miscarriages In US & UK After Vaccines; Also Numerous Pregnancy &amp; Breastfeeding Complications</div>
+								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/Vaersmiscarriages-6-18:3" target="_blank">
+									<img src="https://image-processor.vanwanet.com/optimize/s:640:360/quality:65/plain/https://cdn.lbryplayer.xyz/speech/0a5206c17f1d7c18:0.jpg" />
+									<div class="vidTitle">PREGNANCY LOSS After Covid Vaccine, Many Reports In VAERS: 500+ Miscarriages &amp; Stillbirths</div>
 								</a>
 								<a class="videoReport" style="display:inline-block" href="https://odysee.com/@TimTruth:b/VaersNumbnessCovidVax:a" target="_blank">
 									<img src="https://image-optimizer.vanwanet.com/?address=https://cdn.lbryplayer.xyz/speech/e87f898efab1c90d:7.jpg&height=360&width=640&quality=65" />
